@@ -24,3 +24,48 @@ add_filter( 'wp_mail', function($args) {
     return $args;
 
 } );
+
+
+/**
+ * Log public JavaScript errors
+ */
+add_action("wp_head", "add_js_to_header");
+add_action('wp_ajax_simple_history_log_js_error', "log_error");
+add_action('wp_ajax_nopriv_simple_history_log_js_error', "log_error");
+
+function add_js_to_header() {
+    ?>
+    <script>
+        window.onerror = function(m, u, l) {
+        // console.log('Error message: '+m+'\nURL: '+u+'\nLine Number: '+l);
+        if (encodeURIComponent) {
+            var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>',
+                img = new Image(1,1);
+            img.src = ajaxurl + "?action=simple_history_log_js_error&m=" + encodeURIComponent(m) + "&u=" + encodeURIComponent(u) + "&l=" + encodeURIComponent(l);
+        }
+        return true;
+        }
+    </script>
+    <?php
+
+}
+
+// Log error with ajax
+function log_error() {
+
+    $error = isset( $_GET["m"] ) ? $_GET["m"] : "";
+    $url = isset( $_GET["u"] ) ? $_GET["u"] : "";
+    $line = isset( $_GET["l"] ) ? $_GET["l"] : "";
+
+    $context = array(
+        "error" => $error,
+        "url" => $url,
+        "line" => $line,
+        "browser" => $_SERVER["HTTP_USER_AGENT"]
+    );
+
+    SimpleLogger()->info("Detected a JavaScript error on page '{url}': '{error}'", $context);
+
+    exit;
+
+}
