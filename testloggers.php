@@ -69,3 +69,23 @@ function log_error() {
     exit;
 
 }
+
+
+/**
+ * Log free space on harddrives on server
+ */
+add_action("init", function() {
+
+    $disk_free_space = disk_free_space(dirname(__FILE__));
+    $disk_total_space = disk_total_space(dirname(__FILE__));
+
+    $context = array(
+        "disk_free_space" => $disk_free_space,
+        "disk_total_space" => $disk_total_space,
+        "disk_free_space_formatted" => size_format($disk_free_space),
+        "disk_total_space_formatted" => size_format($disk_total_space)
+    );
+
+    #SimpleLogger()->info("Free space", $context);
+
+});
