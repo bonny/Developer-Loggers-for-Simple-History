@@ -89,3 +89,20 @@ add_action("init", function() {
     #SimpleLogger()->info("Free space", $context);
 
 });
+
+
+/**
+ * Log 404-errors
+ */
+ add_action("404_template", function($template) {
+
+     $context = array(
+         'REQUEST_URI' => isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : "",
+         'HTTP_REFERER' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : ""
+     );
+
+     SimpleLogger()->info("Got a 404-page when trying to visit '{REQUEST_URI}'", $context);
+
+     return $template;
+
+ });
