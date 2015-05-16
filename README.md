@@ -1,4 +1,4 @@
 # WordPress-Simple-History-Testloggers
-Just some loggers that I use to test Simple History. Use on your own risk!
 
-YOLO!
+Some test loggers that used to test the functions
+of [WordPress event logger plugin Simple History](http://simple-history.com).
