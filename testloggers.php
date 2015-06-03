@@ -15,10 +15,18 @@ add_action("simple_history/add_custom_logger", function($simpleHistory) {
 
 });
 
-
+// Load and register the misctestlogger
 add_action("simple_history/add_custom_logger", function($simpleHistory) {
 
     include __DIR__ . "/loggers/MiscTestLogger.php";
     $simpleHistory->register_logger("MiscTestLogger");
+
+});
+
+// Load and register the BackUpWordPress_pluginlogger
+add_action("simple_history/add_custom_logger", function($simpleHistory) {
+
+    include __DIR__ . "/loggers/BackUpWordPress_pluginlogger.php";
+    $simpleHistory->register_logger("BackUpWordPress_pluginlogger");
 
 });
