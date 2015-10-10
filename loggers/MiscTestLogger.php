@@ -1,6 +1,22 @@
 <?php
 
-class miscTestLogger extends SimpleLogger {
+class MiscTestLogger extends SimpleLogger {
+
+    public $slug = __CLASS__;
+
+    function getInfo() {
+
+        $arr_info = array(
+            "name" => "Misc Logger",
+            "description" => "Logs misc things - mostly for testing!",
+            "capability" => "manage_options",
+            "messages" => array(),
+            "labels" => array(), // end search
+        );
+
+        return $arr_info;
+
+    }
 
     function loaded() {
 
@@ -32,25 +48,6 @@ class miscTestLogger extends SimpleLogger {
 
         }, 10, 2);
 
-
-        /**
-         * Log emails sent with wp_mail()
-         */
-        add_filter( 'wp_mail', function($args) {
-
-            $context = array(
-                "email_to" => $args["to"],
-                "email_subject" => $args["subject"],
-                "email_message" => $args["message"]
-            );
-
-            SimpleLogger()->info("Sent an email to '{email_to}' with subject '{email_subject}' using wp_mail()", $context);
-
-            return $args;
-
-        } );
-
-
         /**
          * Log public JavaScript errors
          */
@@ -62,13 +59,13 @@ class miscTestLogger extends SimpleLogger {
             ?>
             <script>
                 window.onerror = function(m, u, l) {
-                // console.log('Error message: '+m+'\nURL: '+u+'\nLine Number: '+l);
-                if (encodeURIComponent) {
-                    var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>',
-                        img = new Image(1,1);
-                    img.src = ajaxurl + "?action=simple_history_log_js_error&m=" + encodeURIComponent(m) + "&u=" + encodeURIComponent(u) + "&l=" + encodeURIComponent(l);
-                }
-                return true;
+                    console.log('Error message: '+m+'\nURL: '+u+'\nLine Number: '+l);
+                    if (encodeURIComponent) {
+                        var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>',
+                            img = new Image(1,1);
+                        img.src = ajaxurl + "?action=simple_history_log_js_error&m=" + encodeURIComponent(m) + "&u=" + encodeURIComponent(u) + "&l=" + encodeURIComponent(l);
+                    }
+                    return true;
                 }
             </script>
             <?php

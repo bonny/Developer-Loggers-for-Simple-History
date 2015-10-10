@@ -1,5 +1,7 @@
 <?php
 
+return;
+
 class BackUpWordPress_pluginlogger extends SimpleLogger {
 
 	public $slug = __CLASS__;

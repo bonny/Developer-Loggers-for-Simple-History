@@ -10,6 +10,8 @@ For form detail:
 http://wp-playground-root.ep/wp-admin/admin.php?page=CF7DBPluginSubmissions&form_name=Contact+form+1&submit_time=1427229448.6991
 */
 
+return;
+
 class ContactFormDBLogger extends SimpleLogger {
 }
 
