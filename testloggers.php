@@ -34,11 +34,6 @@ class SimpleHistory_TestLoggers {
 
             $file_with_path_and_extension = __DIR__ . "/loggers/" . "{$logger_slug}.php";
             include_once $file_with_path_and_extension;
-            //if ( ! class_exists( $logger_slug ) ) {
-            //    continue;
-            //}
-            #d( $logger_slug );
-            #d( $file_with_path_and_extension );
             $this->simpleHistory->register_logger( $logger_slug );
 
         }
@@ -166,6 +161,11 @@ class SimpleHistory_TestLoggers {
             );
 
         }
+
+        // Sort by name
+        usort($arr_loggers_info, function( $a, $b ) {
+            return strcmp( $a["info"]["name"], $b["info"]["name"] );
+        });
 
         return $arr_loggers_info;
 
