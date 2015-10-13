@@ -72,6 +72,14 @@ class SimpleHistory_TestLoggers {
 
             $this->save_settings( $settings );
 
+            add_action( 'admin_notices', function() {
+                ?>
+                <div class="updated">
+                    <p><?php _e( 'Settings saved', 'simple-history' ); ?></p>
+                </div>
+                <?php
+            } );
+
         }
 
     }
