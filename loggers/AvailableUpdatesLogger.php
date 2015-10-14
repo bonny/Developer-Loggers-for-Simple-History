@@ -24,8 +24,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
     function loaded() {
 
-        #add_action("init", array( $this, "on_init" ) );
-
+        // WP is done checking for core udptes it sets a site transient called "update_core"
         add_action("set_site_transient_update_core", array( $this, "on_setted_update_core_transient"), 10, 1);
 
     }
