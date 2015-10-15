@@ -15,6 +15,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
             "messages" => array(
                 "core_update_available" => __( 'WordPress version {wp_core_new_version} is available (you have {wp_core_current_version})', "simple-history" ),
                 "plugin_update_available" => __( 'Plugin "{plugin_name}" has an update available (version available is {plugin_new_version}, installed version is {plugin_current_version})', "simple-history" ),
+                "theme_update_available" => __( 'Theme "{theme_name}" has an update available (version available is {theme_new_version}, installed version is {theme_current_version})', "simple-history" ),
             ),
             "labels" => array(),
         );
@@ -170,10 +171,10 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
             $checked_updates[ $key ]["checked_version"] = $theme_new_version;
 
-            $this->noticeMessage( "plugin_update_available", array(
-                "plugin_name" => isset( $theme_info['Name'] ) ? $theme_info['Name'] : "" ,
-                "plugin_current_version" => isset( $theme_info['Version'] ) ? $theme_info['Version'] : "",
-                "plugin_new_version" => $theme_new_version,
+            $this->noticeMessage( "theme_update_available", array(
+                "theme_name" => isset( $theme_info['Name'] ) ? $theme_info['Name'] : "" ,
+                "theme_current_version" => isset( $theme_info['Version'] ) ? $theme_info['Version'] : "",
+                "theme_new_version" => $theme_new_version,
                 //"plugin_info" => $plugin_info,
                 // "remote_plugin_info" => $remote_plugin_info,
                 // "active_plugins" => $active_plugins,
