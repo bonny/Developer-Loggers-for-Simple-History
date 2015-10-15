@@ -150,7 +150,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
             $theme_info = wp_get_theme( $key );
 
-            $message .= "\n" . sprintf( __( "Theme: %s is out of date. Please update from version %s to %s", "wp-updates-notifier" ), $theme_info['Name'], $theme_info['Version'], $data['new_version'] ) . "\n";
+            #$message .= "\n" . sprintf( __( "Theme: %s is out of date. Please update from version %s to %s", "wp-updates-notifier" ), $theme_info['Name'], $theme_info['Version'], $data['new_version'] ) . "\n";
 
             $settings['notified']['theme'][$key] = $data['new_version']; // set theme version we are notifying about
 
