@@ -79,6 +79,13 @@ class AvailableUpdatesLogger extends SimpleLogger {
         $plugins_need_update = array_intersect_key( $plugins_need_update, $active_plugins ); // only keep plugins that are active
         */
 
+        //update_option( "simplehistory_{$this->slug}_wp_core_version_available", $new_wp_core_version );
+        $option_key = "simplehistory_{$this->slug}_plugin_updates_available";
+        $checked_updates = get_option( $option_key );
+
+        if ( ! is_array( $checked_updates ) ) {
+            $checked_updates = array();
+        }
 
         // File needed plugin API
         require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -87,12 +94,28 @@ class AvailableUpdatesLogger extends SimpleLogger {
         foreach ( $updates->response as $key => $data ) {
 
             $plugin_info = get_plugin_data( WP_PLUGIN_DIR . "/" . $key );
-            $remote_plugin_info = plugins_api( 'plugin_information', array( 'slug' => $data->slug ) );
+            #$remote_plugin_info = plugins_api( 'plugin_information', array( 'slug' => $data->slug ) );
+
+            $plugin_new_version = isset( $data->new_version ) ? $data->new_version : "";
+
+            // check if this plugin and this version has been checked/logged already
+            if ( ! array_key_exists( $key, $checked_updates ) ) {
+                $checked_updates[ $key ] = array(
+                    "checked_version" => null
+                );
+            }
+
+            if ( $checked_updates[ $key ]["checked_version"] == $plugin_new_version ) {
+                // This version has been checked/logged already
+                continue;
+            }
+
+            $checked_updates[ $key ]["checked_version"] = $plugin_new_version;
 
             $this->noticeMessage( "plugin_update_available", array(
                 "plugin_name" => isset( $plugin_info['Name'] ) ? $plugin_info['Name'] : "",
                 "plugin_current_version" => isset( $plugin_info['Version'] ) ? $plugin_info['Version'] : "",
-                "plugin_new_version" => isset( $data->new_version ) ? $data->new_version : "",
+                "plugin_new_version" => $plugin_new_version,
                 "plugin_info" => $plugin_info,
                 // "remote_plugin_info" => $remote_plugin_info,
                 // "active_plugins" => $active_plugins,
@@ -100,6 +123,8 @@ class AvailableUpdatesLogger extends SimpleLogger {
             ) );
 
         } // foreach
+
+        update_option( $option_key, $checked_updates );
 
     } // function
 
