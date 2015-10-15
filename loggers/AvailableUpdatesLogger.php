@@ -33,6 +33,8 @@ class AvailableUpdatesLogger extends SimpleLogger {
         // set_site_transient( 'update_plugins', null ); // Uncomment to test
         add_action( "set_site_transient_update_plugins", array( $this, "on_setted_update_plugins_transient" ), 10, 1 );
 
+        add_action( "set_site_transient_update_themes", array( $this, "on_setted_update_update_themes" ), 10, 1 );
+
     }
 
     function on_setted_update_core_transient( $updates ) {
@@ -94,7 +96,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
         foreach ( $updates->response as $key => $data ) {
 
             $plugin_info = get_plugin_data( WP_PLUGIN_DIR . "/" . $key );
-            #$remote_plugin_info = plugins_api( 'plugin_information', array( 'slug' => $data->slug ) );
+            //$remote_plugin_info = plugins_api( 'plugin_information', array( 'slug' => $data->slug ) );
 
             $plugin_new_version = isset( $data->new_version ) ? $data->new_version : "";
 
@@ -116,7 +118,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
                 "plugin_name" => isset( $plugin_info['Name'] ) ? $plugin_info['Name'] : "",
                 "plugin_current_version" => isset( $plugin_info['Version'] ) ? $plugin_info['Version'] : "",
                 "plugin_new_version" => $plugin_new_version,
-                "plugin_info" => $plugin_info,
+                //"plugin_info" => $plugin_info,
                 // "remote_plugin_info" => $remote_plugin_info,
                 // "active_plugins" => $active_plugins,
                 // "updates" => $updates,
@@ -128,43 +130,60 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
     } // function
 
-}
 
+    function on_setted_update_update_themes( $updates ) {
 
-/**
- * Check to see if any theme updates.
- *
- * @param string $message     holds message to be sent via notification
- * @param int    $allOrActive should we look for all themes or just active ones
- *
- * @return bool
- */
-function themes_update_check( &$message, $allOrActive ) {
-    $settings = self::getSetOptions( self::OPT_FIELD ); // get settings
-    do_action( "wp_update_themes" ); // force WP to check for theme updates
-    $update_themes = get_site_transient( 'update_themes' ); // get information of updates
-    if ( ! empty( $update_themes->response ) ) { // any theme updates available?
-        $themes_need_update = $update_themes->response; // themes that need updating
-        if ( 2 == $allOrActive ) { // are we to check just active themes?
-            $active_theme       = array( get_option( 'template' ) => array() ); // find current theme that is active
-            $themes_need_update = array_intersect_key( $themes_need_update, $active_theme ); // only keep theme that is active
+        if ( empty( $updates->response ) || ! is_array( $updates->response ) ) {
+            return;
         }
-        $themes_need_update = apply_filters( 'sc_wpun_themes_need_update', $themes_need_update ); // additional filtering of themes need update
-        if ( count( $themes_need_update ) >= 1 ) { // any themes need updating after all the filtering gone on above?
-            foreach ( $themes_need_update as $key => $data ) { // loop through the themes that need updating
-                $theme_info = wp_get_theme( $key ); // get theme info
-                $message .= "\n" . sprintf( __( "Theme: %s is out of date. Please update from version %s to %s", "wp-updates-notifier" ), $theme_info['Name'], $theme_info['Version'], $data['new_version'] ) . "\n";
-                $settings['notified']['theme'][$key] = $data['new_version']; // set theme version we are notifying about
+
+        //update_option( "simplehistory_{$this->slug}_wp_core_version_available", $new_wp_core_version );
+        $option_key = "simplehistory_{$this->slug}_theme_updates_available";
+        $checked_updates = get_option( $option_key );
+
+        if ( ! is_array( $checked_updates ) ) {
+            $checked_updates = array();
+        }
+
+        // For each available update
+        foreach ( $updates->response as $key => $data ) {
+
+            $theme_info = wp_get_theme( $key );
+
+            $message .= "\n" . sprintf( __( "Theme: %s is out of date. Please update from version %s to %s", "wp-updates-notifier" ), $theme_info['Name'], $theme_info['Version'], $data['new_version'] ) . "\n";
+
+            $settings['notified']['theme'][$key] = $data['new_version']; // set theme version we are notifying about
+
+            $theme_new_version = isset( $data["new_version"] ) ? $data["new_version"] : "";
+
+            // check if this plugin and this version has been checked/logged already
+            if ( ! array_key_exists( $key, $checked_updates ) ) {
+                $checked_updates[ $key ] = array(
+                    "checked_version" => null
+                );
             }
-            self::getSetOptions( self::OPT_FIELD, $settings ); // save settings
-            return true; // we have theme updates return true
-        }
-    }
-    else {
-        if ( 0 != count( $settings['notified']['theme'] ) ) { // is there any theme notifications?
-            $settings['notified']['theme'] = array(); // set theme notifications to empty as all themes up-to-date
-            self::getSetOptions( self::OPT_FIELD, $settings ); // save settings
-        }
-    }
-    return false; // No theme updates so return false
-}
+
+            if ( $checked_updates[ $key ]["checked_version"] == $theme_new_version ) {
+                // This version has been checked/logged already
+                continue;
+            }
+
+            $checked_updates[ $key ]["checked_version"] = $theme_new_version;
+
+            $this->noticeMessage( "plugin_update_available", array(
+                "plugin_name" => isset( $theme_info['Name'] ) ? $theme_info['Name'] : "" ,
+                "plugin_current_version" => isset( $theme_info['Version'] ) ? $theme_info['Version'] : "",
+                "plugin_new_version" => $theme_new_version,
+                //"plugin_info" => $plugin_info,
+                // "remote_plugin_info" => $remote_plugin_info,
+                // "active_plugins" => $active_plugins,
+                // "updates" => $updates,
+            ) );
+
+        } // foreach
+
+        update_option( $option_key, $checked_updates );
+
+    } // function
+
+} // class
