@@ -19,40 +19,35 @@ class SystemLog_Logger extends SimpleLogger {
     function loaded() {
 
         /**
-         * Filter the context to store for this event/row
-         *
-         * @since 2.0.29
+         * Fired when Simple History filters the context to store for this event/row
          *
          * @param array $context Array with all context data to store. Modify and return this.
          * @param array $data Array with data used for parent row.
          */
-        // $context = apply_filters("simple_history/log_insert_context", $context, $data);
         add_filter( "simple_history/log_insert_context", array( $this, "on_log_insert_context" ), 10, 2 );
 
     }
 
     function on_log_insert_context( $context, $data ) {
 
-        // This is the raw format, so we must generate the nice format outself
-        error_log( SimpleHistory::json_encode( $data ) );
-        error_log( SimpleHistory::json_encode( $context ) );
+        $remote_addr = empty( $context["_server_remote_addr"] ) ? "" : $context["_server_remote_addr"];
+        $level = empty( $data["level"] ) ? "" : $data["level"];
+        $user_login = empty( $context["_user_login"] ) ? "" : $context["_user_login"];
+        $message = $this->interpolate( $data["message"], $context );
 
-        $message = "";
+        $log_message = sprintf(
+            'WordPress Simple History: %1$s %2$s %3$s %4$s',
+            $remote_addr, // 1
+            $level, // 2
+            $user_login, // 3
+            $message // 4
+        );
 
-        if ( ! empty( $data["level"] ) ) {
-            $message .= $data["level"] . ": " ;
-        }
+        error_log( $log_message );
 
-        if ( ! empty( $context["_user_login"] ) ) {
-            $message .= $context["_user_login"] . ": " ;
-        }
-
-        if ( ! empty( $context["_server_remote_addr"] ) ) {
-            $message .= " IP " . $context["_server_remote_addr"] . ": " ;
-        }
-
-        $message .= $this->interpolate( $data["message"], $context );
-        error_log( $message );
+        // Comment out this to store some more debug info
+        // error_log( SimpleHistory::json_encode( $data ) );
+        // error_log( SimpleHistory::json_encode( $context ) );
 
         return $context;
 
