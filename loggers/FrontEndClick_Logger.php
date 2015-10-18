@@ -20,7 +20,9 @@ class FrontEndClick_Logger extends SimpleLogger {
 
     function loaded() {
 
-        wp_enqueue_script( "jquery" );
+        add_action("wp_enqueue_scripts", function() {
+            wp_enqueue_script( "jquery" );
+        });
 
         add_action( "wp_footer", array( $this, "add_script" ) );
 

@@ -46,7 +46,7 @@ class ErrorLog_Logger extends SimpleLogger {
 
     function log_function( $function, $replacement, $version ) {
 
-        $this->debug( "wp deprecated thing", array(
+        $this->debug( "log_function", array(
             "function" => __FUNCTION__,
             "args" => func_get_args()
         ) );
@@ -55,7 +55,7 @@ class ErrorLog_Logger extends SimpleLogger {
 
     function log_file( $file, $replacement, $version, $message ) {
 
-        $this->debug( "wp deprecated thing", array(
+        $this->debug( "log_file", array(
             "function" => __FUNCTION__,
             "args" => func_get_args()
         ) );
@@ -64,7 +64,7 @@ class ErrorLog_Logger extends SimpleLogger {
 
     function log_argument( $function, $message, $version ) {
 
-        $this->debug( "wp deprecated thing", array(
+        $this->debug( "log_argument", array(
             "function" => __FUNCTION__,
             "args" => func_get_args()
         ) );
@@ -83,7 +83,7 @@ class ErrorLog_Logger extends SimpleLogger {
 
     function log_hook( $hook, $replacement, $version, $message ) {
 
-        $this->debug( "wp deprecated thing", array(
+        $this->debug( "log_hook", array(
             "function" => __FUNCTION__,
             "args" => func_get_args()
         ) );
