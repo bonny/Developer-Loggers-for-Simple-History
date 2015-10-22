@@ -19,7 +19,7 @@ class FourOhFourLogger extends SimpleLogger {
 
 		$arr_info = array(
 			"name" => "404 Logger",
-			"description" => "Logs access to pages that result in page not found errors (error code 404)",
+			"description" => "Logs access to pages that result in page not found errors (error code 404). Messages will be logged level notice",
 			"capability" => "edit_pages",
 			"messages" => array(
 				'page_not_found' => __('Got a 404-page when trying to visit "{request_uri}"', "simple-history"),
@@ -65,7 +65,7 @@ class FourOhFourLogger extends SimpleLogger {
             'http_referer' => isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : "",
         );
 
-        $this->warningMessage("page_not_found", $context);
+        $this->noticeMessage("page_not_found", $context);
 
         return $template;
 
