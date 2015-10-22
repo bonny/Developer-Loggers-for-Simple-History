@@ -53,12 +53,14 @@ class FrontEndClick_Logger extends SimpleLogger {
 
                 }
 
-                $(document).on("click", selector, collectClick)
+                // todo: finnish this
+                // $(document).on("click", selector, collectClick)
 
             })(jQuery);
 
         </script>
-        <?
+        
+        <?php
 
     }
 
