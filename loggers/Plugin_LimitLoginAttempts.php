@@ -21,13 +21,13 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 			"description" => "",
 			"capability" => "manage_options",
 			"messages" => array(
-				'user_locked_out' => __('User locked out', "simple-history"),
+				'user_locked_out' => __( 'User locked out', "simple-history" ),
 			),
 			"labels" => array(
 				"search" => array(
-					"label" => _x("Limit Login Attempts", "Logger plugin Limit Login Attempts", "simple-history"),
+					"label" => _x( "Limit Login Attempts", "Logger plugin Limit Login Attempts", "simple-history" ),
 					"options" => array(
-						_x("xxxPages not found", "User logger: 404", "simple-history") => array(
+						_x( "xxxPages not found", "User logger: 404", "simple-history" ) => array(
 							"page_not_found",
 						),
 					),
@@ -43,76 +43,200 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
         add_filter( "pre_option_limit_login_lockouts_total", array( $this, "on_option_limit_login_lockouts_total" ), 10, 1 );
 
+        add_action( "load-settings_page_limit-login-attempts", array( $this, "on_load_settings_page" ), 10, 1 );
+
+    }
+
+    /**
+     * Fired when plugin options screen is loaded
+     */
+    function on_load_settings_page($a) {
+
+        #var_dump( check_admin_referer('limit-login-attempts-options') );
+        #dd( $_POST );
+
+        if ( $_POST && wp_verify_nonce($_POST["_wpnonce"], "limit-login-attempts-options") ) {
+
+            // Settings saved
+        	if (isset($_POST['clear_log'])) {
+                $this->notice( "Cleared IP log" );
+            }
+
+            if (isset($_POST['reset_total'])) {
+                $this->notice( "Reset lockout count" );
+            }
+
+            if (isset($_POST['reset_current'])) {
+                $this->notice( "Cleared current lockouts" );
+            }
+
+            if (isset($_POST['update_options'])) {
+
+                $options = array(
+                    "client_type" => sanitize_text_field( $_POST['client_type'] ),
+            		"allowed_retries" => sanitize_text_field( $_POST['allowed_retries'] ),
+            		"lockout_duration" => sanitize_text_field( $_POST['lockout_duration'] ) * 60 ,
+            		"valid_duration" => sanitize_text_field( $_POST['valid_duration'] ) * 3600,
+            		"allowed_lockouts" => sanitize_text_field( $_POST['allowed_lockouts'] ),
+            		"long_duration" => sanitize_text_field( $_POST['long_duration'] ) * 3600,
+            		"email_after" => sanitize_text_field( $_POST['email_after'] ),
+                    "cookies" => (isset($_POST['cookies']) && $_POST['cookies'] == '1') ? "yes" : "no"
+                );
+
+                $v = array();
+        		if (isset($_POST['lockout_notify_log'])) {
+        			$v[] = 'log';
+        		}
+        		if (isset($_POST['lockout_notify_email'])) {
+        			$v[] = 'email';
+        		}
+        		$lockout_notify = implode(',', $v);
+                $options["lockout_notify"] = $lockout_notify;
+
+                $this->notice("Updated options", array(
+                    "options" => $options
+                ));
+
+            }
+
+            /*
+            Should we clear log?
+        	if (isset($_POST['clear_log'])) {
+        			. __('Cleared IP log', 'limit-login-attempts')
+        			. '</p></div>';
+        	}
+
+        	Should we reset counter
+        	if (isset($_POST['reset_total'])) {
+        		update_option('limit_login_lockouts_total', 0);
+        		echo '<div id="message" class="updated fade"><p>'
+        			. __('Reset lockout count', 'limit-login-attempts')
+        			. '</p></div>';
+        	}
+
+        	Should we restore current lockouts
+        	if (isset($_POST['reset_current'])) {
+        		update_option('limit_login_lockouts', array());
+        		echo '<div id="message" class="updated fade"><p>'
+        			. __('Cleared current lockouts', 'limit-login-attempts')
+        			. '</p></div>';
+        	}
+
+            if (isset($_POST['update_options'])) {
+        		global $limit_login_options;
+
+        		$limit_login_options['client_type'] = $_POST['client_type'];
+        		$limit_login_options['allowed_retries'] = $_POST['allowed_retries'];
+        		$limit_login_options['lockout_duration'] = $_POST['lockout_duration'] * 60;
+        		$limit_login_options['valid_duration'] = $_POST['valid_duration'] * 3600;
+        		$limit_login_options['allowed_lockouts'] = $_POST['allowed_lockouts'];
+        		$limit_login_options['long_duration'] = $_POST['long_duration'] * 3600;
+        		$limit_login_options['notify_email_after'] = $_POST['email_after'];
+        		$limit_login_options['cookies'] = (isset($_POST['cookies']) && $_POST['cookies'] == '1');
+
+        		$v = array();
+        		if (isset($_POST['lockout_notify_log'])) {
+        			$v[] = 'log';
+        		}
+        		if (isset($_POST['lockout_notify_email'])) {
+        			$v[] = 'email';
+        		}
+        		$limit_login_options['lockout_notify'] = implode(',', $v);
+
+
+            */
+
+        }
+
+        /*
+        $_POST array(12)
+        '_wpnonce' => string(10) "35afb3d783"
+        '_wp_http_referer' => string(55) "/wp-admin/options-general.php?page=limit-login-attempts"
+        'allowed_retries' => string(1) "4"
+        'lockout_duration' => string(2) "20"
+        'allowed_lockouts' => string(1) "4"
+        'long_duration' => string(2) "24"
+        'valid_duration' => string(2) "12"
+        'client_type' => string(11) "REMOTE_ADDR"
+        'cookies' => string(1) "1"
+        'lockout_notify_log' => string(3) "log"
+        'email_after' => string(1) "4"
+        'update_options' => string(14) "Change Options"
+        */
+
     }
 
     function on_option_limit_login_lockouts_total( $value ) {
 
         global $limit_login_just_lockedout;
-		$limit_login_just_lockedout = true;
+
+        if ( ! $limit_login_just_lockedout ) {
+            return $value;
+        }
 
         $ip = limit_login_get_address();
-    	$whitelisted = is_limit_login_ip_whitelisted($ip);
+    	$whitelisted = is_limit_login_ip_whitelisted( $ip );
 
-        $limit_login_logged = get_option('limit_login_logged');
+        $limit_login_logged = get_option( 'limit_login_logged' );
 
-        $retries = get_option('limit_login_retries');
-        if (!is_array($retries)) {
+        $retries = get_option( 'limit_login_retries' );
+        if ( ! is_array( $retries ) ) {
     		$retries = array();
     	}
 
-        if ( isset($retries[$ip])
-    		 && ( ($retries[$ip] / limit_login_option('allowed_retries'))
-    			  % limit_login_option('notify_email_after') ) != 0 ) {
+        if ( isset( $retries[$ip] )
+    		 && ( ( $retries[$ip] / limit_login_option( 'allowed_retries' ) )
+    			  % limit_login_option( 'notify_email_after' ) ) != 0 ) {
 
-            $this->notice("user locked out but don't log");
+            $this->notice( "user locked out but don't log" );
 
-            #return;
+            //return;
     	}
 
         /* Format message. First current lockout duration */
-    	if (!isset($retries[$ip])) {
+    	if ( ! isset( $retries[$ip] ) ) {
     		/* longer lockout */
-    		$count = limit_login_option('allowed_retries')
-    			* limit_login_option('allowed_lockouts');
-    		$lockouts = limit_login_option('allowed_lockouts');
-    		$time = round(limit_login_option('long_duration') / 3600);
-    		$when = sprintf(_n('%d hour', '%d hours', $time, 'limit-login-attempts'), $time);
+    		$count = limit_login_option( 'allowed_retries' )
+    			* limit_login_option( 'allowed_lockouts' );
+    		$lockouts = limit_login_option( 'allowed_lockouts' );
+    		$time = round( limit_login_option( 'long_duration' ) / 3600 );
+    		$when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
     	} else {
     		/* normal lockout */
     		$count = $retries[$ip];
-    		$lockouts = floor($count / limit_login_option('allowed_retries'));
-    		$time = round(limit_login_option('lockout_duration') / 60);
-    		$when = sprintf(_n('%d minute', '%d minutes', $time, 'limit-login-attempts'), $time);
+    		$lockouts = floor( $count / limit_login_option( 'allowed_retries' ) );
+    		$time = round( limit_login_option( 'lockout_duration' ) / 60 );
+    		$when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
     	}
 
-    	$blogname = is_limit_login_multisite() ? get_site_option('site_name') : get_option('blogname');
+    	$blogname = is_limit_login_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' );
 
 
-        if ($whitelisted) {
-    		$subject = sprintf(__("[%s] Failed login attempts from whitelisted IP"
-    				      , 'limit-login-attempts')
-    				   , $blogname);
+        if ( $whitelisted ) {
+    		$subject = sprintf( __( "[%s] Failed login attempts from whitelisted IP"
+    				      , 'limit-login-attempts' )
+    				   , $blogname );
     	} else {
-    		$subject = sprintf(__("[%s] Too many failed login attempts"
-    				      , 'limit-login-attempts')
-    				   , $blogname);
+    		$subject = sprintf( __( "[%s] Too many failed login attempts"
+    				      , 'limit-login-attempts' )
+    				   , $blogname );
     	}
 
-        $message = sprintf(__("%d failed login attempts (%d lockout(s)) from IP: %s"
-    			      , 'limit-login-attempts') . "\r\n\r\n"
-    			   , $count, $lockouts, $ip);
-    	if ($user != '') {
-    		$message .= sprintf(__("Last user attempted: %s", 'limit-login-attempts')
-    				    . "\r\n\r\n" , $user);
+        $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s"
+    			      , 'limit-login-attempts' ) . "\r\n\r\n"
+    			   , $count, $lockouts, $ip );
+    	if ( $user != '' ) {
+    		$message .= sprintf( __( "Last user attempted: %s", 'limit-login-attempts' )
+    				    . "\r\n\r\n" , $user );
     	}
-    	if ($whitelisted) {
-    		$message .= __("IP was NOT blocked because of external whitelist.", 'limit-login-attempts');
+    	if ( $whitelisted ) {
+    		$message .= __( "IP was NOT blocked because of external whitelist.", 'limit-login-attempts' );
     	} else {
-    		$message .= sprintf(__("IP was blocked for %s", 'limit-login-attempts'), $when);
+    		$message .= sprintf( __( "IP was blocked for %s", 'limit-login-attempts' ), $when );
     	}
 
         //noticeMessage
-        $this->noticeMessage("user_locked_out", array(
+        $this->noticeMessage( "user_locked_out", array(
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
             "limit_login_logged" => $limit_login_logged,
@@ -120,7 +244,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             "whitelisted" => $whitelisted,
             "subject" => $subject,
             "message" => $message
-        ));
+        ) );
 
         return $value;
 
