@@ -43,6 +43,12 @@ class AvailableUpdatesLogger extends SimpleLogger {
         global $wp_version;
 
         $last_version_checked = get_option( "simplehistory_{$this->slug}_wp_core_version_available" );
+
+        // During update of network sites this was not set, so make sure to check
+        if ( empty( $updates->updates[0]->current ) ) {
+            return;
+        }
+        
         $new_wp_core_version = $updates->updates[0]->current; // The new WP core version
 
         // Some plugins can mess with version, so get fresh from the version file.
