@@ -21,18 +21,22 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 			"description" => "",
 			"capability" => "manage_options",
 			"messages" => array(
-				'user_locked_out' => __( 'User locked out', "simple-history" ),
+				'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+                "cleared_ip_log" => _x( 'Cleared IP log', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+                "reseted_lockout_count" => _x( 'Reseted lockout count', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+                "cleared_current_lockouts" => _x( 'Cleared current lockouts', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+                "updated_options" => _x( 'Updated options', "Logger: Plugin Limit Login Attempts", "simple-history" ),
 			),
-			"labels" => array(
+			/*"labels" => array(
 				"search" => array(
-					"label" => _x( "Limit Login Attempts", "Logger plugin Limit Login Attempts", "simple-history" ),
+					"label" => _x( "Limit Login Attempts", "Logger: Plugin Limit Login Attempts", "simple-history" ),
 					"options" => array(
 						_x( "xxxPages not found", "User logger: 404", "simple-history" ) => array(
 							"page_not_found",
 						),
 					),
 				), // end search
-			), // end labels
+			),*/  // end labels
 		);
 
 		return $arr_info;
@@ -59,15 +63,15 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
             // Settings saved
         	if (isset($_POST['clear_log'])) {
-                $this->notice( "Cleared IP log" );
+                $this->noticeMessage( "cleared_ip_log" );
             }
 
             if (isset($_POST['reset_total'])) {
-                $this->notice( "Reset lockout count" );
+                $this->noticeMessage( "reseted_lockout_count" );
             }
 
             if (isset($_POST['reset_current'])) {
-                $this->notice( "Cleared current lockouts" );
+                $this->noticeMessage( "cleared_current_lockouts" );
             }
 
             if (isset($_POST['update_options'])) {
@@ -93,7 +97,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
         		$lockout_notify = implode(',', $v);
                 $options["lockout_notify"] = $lockout_notify;
 
-                $this->notice("Updated options", array(
+                $this->noticeMessage("updated_options", array(
                     "options" => $options
                 ));
 
