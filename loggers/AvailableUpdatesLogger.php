@@ -203,4 +203,62 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
     } // function
 
+    /**
+     * Append prev and current version of update object as details in the output
+     */
+    function getLogRowDetailsOutput( $row ) {
+
+        $output = "";
+
+        $current_version = null;
+        $new_version = null;
+
+        $context = isset( $row->context ) ? $row->context : array();
+
+        switch ( $row->context_message_key ) {
+
+            case "core_update_available":
+                $current_version = isset( $context["wp_core_current_version"] ) ? $context["wp_core_current_version"] : null;
+                $new_version = isset( $context["wp_core_new_version"] ) ? $context["wp_core_new_version"] : null;
+                break;
+
+            case "plugin_update_available":
+                $current_version = isset( $context["plugin_current_version"] ) ? $context["plugin_current_version"] : null;
+                $new_version = isset( $context["plugin_new_version"] ) ? $context["plugin_new_version"] : null;
+                break;
+
+            case "theme_update_available":
+                $current_version = isset( $context["theme_current_version"] ) ? $context["theme_current_version"] : null;
+                $new_version = isset( $context["theme_new_version"] ) ? $context["theme_new_version"] : null;
+                break;
+
+        }
+
+        #$output .= "<pre>";
+        // $output .= SimpleHistory::json_encode( $row );
+        #$output .= "</pre>";
+        if ( $current_version && $new_version  ) {
+
+            // $output .= '<table class="xxxSimpleHistoryLogitem__keyValueTable"><tbody>';
+
+            $output .= '<p>';
+            $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
+            $output .= sprintf( __( 'Version available is %1$s' ), $current_version );
+            $output .= '</span> ';
+
+            $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
+            $output .= sprintf( __( 'Your version is %1$s' ), $new_version );
+            $output .= '</span>';
+
+            $output .= '</p>';
+            // $output .= '</tr>';
+
+            // $output .= '</tbody></table>';
+
+        }
+
+        return $output;
+
+    }
+
 } // class
