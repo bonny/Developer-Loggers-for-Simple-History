@@ -1,5 +1,12 @@
 <?php
 
+/*
+
+Todo
+"_initiator" => SimpleLoggerLogInitiators::WORDPRESS
+
+*/
+
 class AvailableUpdatesLogger extends SimpleLogger {
 
     public $slug = __CLASS__;
@@ -13,9 +20,9 @@ class AvailableUpdatesLogger extends SimpleLogger {
             "description" => "Logs available updates",
             "capability" => "manage_options",
             "messages" => array(
-                "core_update_available" => __( 'WordPress version {wp_core_new_version} is available (you have {wp_core_current_version})', "simple-history" ),
-                "plugin_update_available" => __( 'Plugin "{plugin_name}" has an update available (version available is {plugin_new_version}, installed version is {plugin_current_version})', "simple-history" ),
-                "theme_update_available" => __( 'Theme "{theme_name}" has an update available (version available is {theme_new_version}, installed version is {theme_current_version})', "simple-history" ),
+                "core_update_available" => __( 'Found an update to WordPress.', "simple-history" ),
+                "plugin_update_available" => __( 'Found an update to plugin "{plugin_name}"', "simple-history" ),
+                "theme_update_available" => __( 'Found an update to theme "{theme_name}"', "simple-history" ),
             ),
             "labels" => array(),
         );
@@ -48,7 +55,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
         if ( empty( $updates->updates[0]->current ) ) {
             return;
         }
-        
+
         $new_wp_core_version = $updates->updates[0]->current; // The new WP core version
 
         // Some plugins can mess with version, so get fresh from the version file.
@@ -64,7 +71,8 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
             $this->noticeMessage( "core_update_available", array(
                 "wp_core_current_version" => $wp_version,
-                "wp_core_new_version" => $new_wp_core_version
+                "wp_core_new_version" => $new_wp_core_version,
+                "_initiator" => SimpleLoggerLogInitiators::WORDPRESS
             ) );
 
             // Store updated version available, so we don't log that version again
@@ -125,6 +133,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
                 "plugin_name" => isset( $plugin_info['Name'] ) ? $plugin_info['Name'] : "",
                 "plugin_current_version" => isset( $plugin_info['Version'] ) ? $plugin_info['Version'] : "",
                 "plugin_new_version" => $plugin_new_version,
+                "_initiator" => SimpleLoggerLogInitiators::WORDPRESS
                 //"plugin_info" => $plugin_info,
                 // "remote_plugin_info" => $remote_plugin_info,
                 // "active_plugins" => $active_plugins,
@@ -181,6 +190,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
                 "theme_name" => isset( $theme_info['Name'] ) ? $theme_info['Name'] : "" ,
                 "theme_current_version" => isset( $theme_info['Version'] ) ? $theme_info['Version'] : "",
                 "theme_new_version" => $theme_new_version,
+                "_initiator" => SimpleLoggerLogInitiators::WORDPRESS
                 //"plugin_info" => $plugin_info,
                 // "remote_plugin_info" => $remote_plugin_info,
                 // "active_plugins" => $active_plugins,
