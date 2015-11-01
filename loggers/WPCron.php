@@ -14,7 +14,7 @@ class WPCron extends SimpleLogger {
             "description" => "Logs WP Crons",
             "capability" => "manage_options",
             "messages" => array(
-                "cron_runned" => __( 'Found an update to WordPress.', "simple-history" ),
+                "did_cron" => __(  'Did cron job with action hook "{cron_hook}"', "simple-history" ),
             ),
             "labels" => array(),
         );
@@ -71,7 +71,7 @@ class WPCron extends SimpleLogger {
                     // When we get here, WordPress is probably about to do a cron job
                     add_action( $hook, function() use( $keys, $k, $v ) {
 
-                        $this->debug( 'Did cron job with hook "{cron_hook}"', array(
+                        $this->debugMessage("did_cron", array(
                             "cron_hook" => current_filter(),
                             "keys" => $keys,
                             "k" => $k,
