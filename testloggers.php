@@ -210,35 +210,3 @@ add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
     $logger->init( $simpleHistory );
 
 } );
-
-
-return;
-
-
-
-
-
-
-// Load and register the 404-logger
-add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
-
-    include __DIR__ . "/loggers/FourOhFourLogger.php";
-    $simpleHistory->register_logger( "FourOhFourLogger" );
-
-} );
-
-// Load and register the misctestlogger
-add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
-
-    include __DIR__ . "/loggers/MiscTestLogger.php";
-    $simpleHistory->register_logger( "MiscTestLogger" );
-
-} );
-
-// Load and register the BackUpWordPress_pluginlogger
-add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
-
-    include __DIR__ . "/loggers/BackUpWordPress_pluginlogger.php";
-    $simpleHistory->register_logger( "BackUpWordPress_pluginlogger" );
-
-} );
