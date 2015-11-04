@@ -7,11 +7,9 @@ class WPCron extends SimpleLogger {
 
     function getInfo() {
 
-        // error_log("AvailableUpdatesLogger: getInfo()");
-
         $arr_info = array(
             "name" => "WPCron",
-            "description" => "Logs WP Crons",
+            "description" => "Logs WP Crons. Can be very useful for debugging purposed. Also: can be highly annoying too. Use wisely!",
             "capability" => "manage_options",
             "messages" => array(
                 "did_cron" => __(  'Did cron job with action hook "{cron_hook}"', "simple-history" ),
@@ -69,6 +67,8 @@ class WPCron extends SimpleLogger {
                     */
 
                     // When we get here, WordPress is probably about to do a cron job
+                    // Add action to same hook, but use a pretty high filter so our logging will
+                    // probably take place after the real job has run
                     add_action( $hook, function() use( $keys, $k, $v ) {
 
                         $this->debugMessage("did_cron", array(
@@ -78,7 +78,7 @@ class WPCron extends SimpleLogger {
                             "v" => $v
                         ) );
 
-                    } );
+                    }, 50 );
 
 
                 }
