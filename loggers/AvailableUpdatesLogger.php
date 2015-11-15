@@ -243,11 +243,11 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
             $output .= '<p>';
             $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
-            $output .= sprintf( __( '<em>Version available</em> %1$s' ), $current_version );
+            $output .= sprintf( __( '<em>Version available</em> %1$s' ), $new_version );
             $output .= '</span> ';
 
             $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
-            $output .= sprintf( __( '<em>Your version</em> %1$s' ), $new_version );
+            $output .= sprintf( __( '<em>Your version</em> %1$s' ), $current_version );
             $output .= '</span>';
 
             $output .= '</p>';
