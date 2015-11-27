@@ -19,7 +19,10 @@ class WPMailLogger extends SimpleLogger {
 
         $arr_info = array(
             "name" => "WP Mail Logger",
-            "description" => "Logs mail sent by WordPress using the wp_mail-function"
+            "description" => "Logs mail sent by WordPress using the wp_mail-function",
+            "messages" => array(
+                "email_sent" => __( 'Sent an email to "{email_to}" with subject "{email_subject}" using wp_mail()', "simple-history" )
+            )
         );
 
         return $arr_info;
@@ -36,7 +39,7 @@ class WPMailLogger extends SimpleLogger {
         /**
          * Use the "wp_mail" filter to log emails sent with wp_mail()
          */
-        add_filter( 'wp_mail', function($args) {
+        add_filter( 'wp_mail', function( $args ) {
 
             $context = array(
                 "email_to" => $args["to"],
@@ -44,13 +47,69 @@ class WPMailLogger extends SimpleLogger {
                 "email_message" => $args["message"]
             );
 
-            SimpleLogger()->info("Sent an email to '{email_to}' with subject '{email_subject}' using wp_mail()", $context);
+            $this->infoMessage("email_sent", $context );
 
             return $args;
 
         } );
 
     }
+
+    /**
+	 * Get output for detailed log section
+     * Make the send mail look a little bit like a real email client
+	 */
+	function getLogRowDetailsOutput( $row ) {
+
+        $context = $row->context;
+        $message_key = $context["_message_key"];
+
+        $output = "";
+
+        $output .= '<table class="SimpleHistoryLogitem__keyValueTable"><tbody>';
+
+        if ( ! empty( $context["email_to"] ) ) {
+
+            $output .= sprintf(
+                '<tr>
+                    <td>To</td>
+                    <td>%1$s</td>
+                </tr>',
+                esc_html( $context["email_to"] )
+            );
+
+        }
+
+        if ( ! empty( $context["email_subject"] ) ) {
+
+            $output .= sprintf(
+                '<tr>
+                    <td>Subject</td>
+                    <td>%1$s</td>
+                </tr>',
+                esc_html( $context["email_subject"] )
+            );
+
+        }
+
+        if ( ! empty( $context["email_message"] ) ) {
+
+            $output .= sprintf(
+                '<tr>
+                    <td>Body</td>
+                    <td>%1$s</td>
+                </tr>',
+                nl2br( esc_html( $context["email_message"] ) )
+            );
+
+        }
+
+        $output .= '</tbody></table>';
+
+        return $output;
+
+    }
+
 }
 
 // Tell Simple History that we have a new logger available

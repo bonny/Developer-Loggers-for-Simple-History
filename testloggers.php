@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Simple History Testloggers
+ * Plugin Name: Development loggers for Simple History
  * Plugin URI: https://github.com/bonny/WordPress-Simple-History-Testloggers
- * Description: Misc loggers to test Simple History
+ * Description: Loggers for Simple History that are useful for developers and admins
  * Version: 0.1
  * Author: Pär Thernström
  */
 
-class SimpleHistory_TestLoggers {
+class SimpleHistory_DevelopmentLoggers {
 
     // Instance of simpleHistory
     private $simpleHistory;
@@ -156,7 +156,7 @@ class SimpleHistory_TestLoggers {
                 continue;
             }
 
-            $file_instance = new $file_basename();
+            $file_instance = new $file_basename( $this->simpleHistory );
             if ( ! is_subclass_of( $file_instance, "SimpleLogger" ) ) {
                 continue;
             }
@@ -183,7 +183,7 @@ class SimpleHistory_TestLoggers {
 
         $this->simpleHistory->registerSettingsTab( array(
 			"slug" => $this->slug,
-			"name" => __( "TestLogger", "simple-history" ),
+			"name" => __( "Development loggers", "simple-history" ),
 			"function" => array( $this, "settings_output" ),
         ) );
 
@@ -206,7 +206,7 @@ class SimpleHistory_TestLoggers {
 add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
 
     // $simpleHistory->register_logger("FourOhFourLogger");
-    $logger = new SimpleHistory_TestLoggers;
+    $logger = new SimpleHistory_DevelopmentLoggers;
     $logger->init( $simpleHistory );
 
 } );
