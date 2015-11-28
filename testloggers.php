@@ -1,18 +1,19 @@
 <?php
 /**
- * Plugin Name: Development loggers for Simple History
- * Plugin URI: https://github.com/bonny/WordPress-Simple-History-Testloggers
+ * Plugin Name: Developer Loggers for Simple History
+ * Plugin URI: https://github.com/bonny/Developer-Loggers-for-Simple-History
+ * GitHub URI: https://github.com/bonny/Developer-Loggers-for-Simple-History
  * Description: Loggers for Simple History that are useful for developers and admins
  * Version: 0.1
  * Author: Pär Thernström
  */
 
-class SimpleHistory_DevelopmentLoggers {
+class SimpleHistory_DeveloperLoggers {
 
     // Instance of simpleHistory
     private $simpleHistory;
 
-    public $slug = "TestLogger";
+    public $slug = "DeveloperLoggers";
 
     function init( $simpleHistory ) {
 
@@ -205,8 +206,8 @@ class SimpleHistory_DevelopmentLoggers {
  */
 add_action( "simple_history/add_custom_logger", function( $simpleHistory ) {
 
-    // $simpleHistory->register_logger("FourOhFourLogger");
-    $logger = new SimpleHistory_DevelopmentLoggers;
+    $logger = new SimpleHistory_DeveloperLoggers;
+
     $logger->init( $simpleHistory );
 
 } );
