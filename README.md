@@ -1,7 +1,7 @@
 # Developer Loggers for Simple History
 
 Loggers for [WordPress event logger plugin Simple History](http://simple-history.com)
-are useful for developers during development of a site or to maintain a live site.
+that are useful for developers during development of a site or to maintain a live site.
 
 ## Included loggers
 
