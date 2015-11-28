@@ -34,8 +34,11 @@ class SimpleHistory_DeveloperLoggers {
         foreach ( $enabled_loggers as $logger_slug => $one_enabled_logger ) {
 
             $file_with_path_and_extension = __DIR__ . "/loggers/" . "{$logger_slug}.php";
-            include_once $file_with_path_and_extension;
-            $this->simpleHistory->register_logger( $logger_slug );
+
+            if ( file_exists( $file_with_path_and_extension ) ) {
+                include_once $file_with_path_and_extension;
+                $this->simpleHistory->register_logger( $logger_slug );
+            }
 
         }
 
@@ -149,6 +152,7 @@ class SimpleHistory_DeveloperLoggers {
         }
 
         $arr_loggers_info = array();
+
         foreach ( $filelist as $file ) {
 
             $file_basename = basename( $file, ".php" );
@@ -183,9 +187,9 @@ class SimpleHistory_DeveloperLoggers {
     function add_settings_tab() {
 
         $this->simpleHistory->registerSettingsTab( array(
-			"slug" => $this->slug,
-			"name" => __( "Development loggers", "simple-history" ),
-			"function" => array( $this, "settings_output" ),
+                        "slug" => $this->slug,
+                        "name" => __( "Developer loggers", "simple-history" ),
+                        "function" => array( $this, "settings_output" ),
         ) );
 
     }
