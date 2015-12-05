@@ -1,6 +1,6 @@
 <?php
 
-class ErrorLog_Logger extends SimpleLogger {
+class ErrorLogLogger extends SimpleLogger {
 
     public $slug = __CLASS__;
 
@@ -11,7 +11,21 @@ class ErrorLog_Logger extends SimpleLogger {
             "description" => "Logs PHP errors during runtime",
             "capability" => "manage_options",
             "messages" => array(
-                "doing_it_wrong" => __( 'You\'re doing it wrong: {function_name}(): {wp_message}', "simple-history" ),
+
+                "deprecated_function" => __(
+                    'Function "{function}" is deprecated since version "{version}"! Use "{replacement}" instead.',
+                    "simple-history"
+                ),
+
+                "deprecated_argument" => __(
+                    'Function "{function}" was called with an argument that is deprecated since version "{version}" "{message}"',
+                    "simple-history"
+                ),
+
+                "doing_it_wrong" => __(
+                    'You\'re doing it wrong: "{function}" "{message}"',
+                    "simple-history"
+                ),
             ),
             "labels" => array(),
         );
@@ -20,9 +34,13 @@ class ErrorLog_Logger extends SimpleLogger {
 
     function loaded() {
 
+        #add_action("init", function() {
+        #    var_dump($this->messages);exit;
+        #});
+
         // Don't log things when doing the Simple History AJAX call becuase will log on and on and on...
         if ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_GET["simple_history_api"] ) ) {
-            return;
+            #return;
         }
 
         if ( WP_DEBUG ) {
@@ -32,27 +50,45 @@ class ErrorLog_Logger extends SimpleLogger {
 
         // Log deprecated notices.
         add_action( 'deprecated_function_run',  array( &$this, 'log_function' ), 10, 3 );
-		add_action( 'deprecated_file_included', array( &$this, 'log_file'     ), 10, 4 );
+		//add_action( 'deprecated_file_included', array( &$this, 'log_file'     ), 10, 4 );
 		add_action( 'deprecated_argument_run',  array( &$this, 'log_argument' ), 10, 4 );
 		add_action( 'doing_it_wrong_run',       array( &$this, 'log_wrong'    ), 10, 3 );
-		add_action( 'deprecated_hook_used',     array( &$this, 'log_hook'     ), 10, 4 );
+		//add_action( 'deprecated_hook_used',     array( &$this, 'log_hook'     ), 10, 4 );
 
-        error_reporting( 0 );
-        @ini_set( 'display_errors', 0 );
+        #error_reporting( 0 );
+        #@ini_set( 'display_errors', 0 );
 
         set_error_handler( array( $this, "handle_error" ) );
+
+        // Must test after loggers are loaded. or later.
+        add_action("admin_init", function() {
+
+            // Deprecated functions
+            // js_escape("test");
+            // clean_url("test");
+
+            // Uses deprecated argument "misc" for options group name
+            // register_setting( "misc", "My option name", "sanitize_callback");
+
+            // do_shortcode_tag("shortcode_that_does_not_exist");
+
+        });
+
+        #var_dump($this->messages);exit;
 
     }
 
     function log_function( $function, $replacement, $version ) {
 
-        $this->debug( "log_function", array(
-            "function" => __FUNCTION__,
-            "args" => func_get_args()
+        $this->debugMessage( "deprecated_function", array(
+            "function" => $function,
+            "replacement" => $replacement,
+            "version" => $version
         ) );
 
     }
 
+    /*
     function log_file( $file, $replacement, $version, $message ) {
 
         $this->debug( "log_file", array(
@@ -61,12 +97,14 @@ class ErrorLog_Logger extends SimpleLogger {
         ) );
 
     }
+    */
 
     function log_argument( $function, $message, $version ) {
 
-        $this->debug( "log_argument", array(
-            "function" => __FUNCTION__,
-            "args" => func_get_args()
+        $this->debugMessage( "deprecated_argument", array(
+            "function" => $function,
+            "message" => $message,
+            "version" => $version
         ) );
 
     }
@@ -74,13 +112,14 @@ class ErrorLog_Logger extends SimpleLogger {
     function log_wrong( $function, $message, $version ) {
 
         $this->debugMessage( "doing_it_wrong", array(
-            "function_name" => $function,
-            "wp_message" => $message,
-            "args" => func_get_args()
+            "function" => $function,
+            "message" => $message,
+            "version" => $version
         ) );
 
     }
 
+    /*
     function log_hook( $hook, $replacement, $version, $message ) {
 
         $this->debug( "log_hook", array(
@@ -89,6 +128,7 @@ class ErrorLog_Logger extends SimpleLogger {
         ) );
 
     }
+    */
 
 
     function handle_error( $errno = null, $errstr = null, $errfile = null, $errline = null, $errcontext = null ) {
