@@ -21,7 +21,7 @@ class WPMailLogger extends SimpleLogger {
             "name" => "WP Mail Logger",
             "description" => "Logs mail sent by WordPress using the wp_mail-function",
             "messages" => array(
-                "email_sent" => __( 'Sent an email to "{email_to}" with subject "{email_subject}" using wp_mail()', "simple-history" )
+                "email_sent" => __( 'Sent an email using wp_mail()', "simple-history" )
             )
         );
 
@@ -38,7 +38,9 @@ class WPMailLogger extends SimpleLogger {
 
         /**
          * Use the "wp_mail" filter to log emails sent with wp_mail()
+         * $args = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
          */
+        /*
         add_filter( 'wp_mail', function( $args ) {
 
             $context = array(
@@ -52,6 +54,27 @@ class WPMailLogger extends SimpleLogger {
             return $args;
 
         } );
+        */
+
+
+        /*
+        * Fires after PHPMailer is initialized.
+       	* @param PHPMailer &$phpmailer The PHPMailer instance, passed by reference.
+       	do_action_ref_array( 'phpmailer_init', array( &$phpmailer ) );
+        */
+        add_action('phpmailer_init', function( $phpmailer ) {
+
+            $context = array(
+                "to" => $phpmailer->getToAddresses(),
+                "from" => $phpmailer->From,
+                "fromName" => $phpmailer->FromName,
+                "subject" => $phpmailer->Subject,
+                "body" => $phpmailer->Body
+            );
+
+            $this->infoMessage("email_sent", $context );
+
+        });
 
     }
 
@@ -68,38 +91,60 @@ class WPMailLogger extends SimpleLogger {
 
         $output .= '<table class="SimpleHistoryLogitem__keyValueTable"><tbody>';
 
-        if ( ! empty( $context["email_to"] ) ) {
+        if ( ! empty( $context["from"] ) ) {
+
+            $output .= sprintf(
+                '<tr>
+                    <td>From</td>
+                    <td>%1$s</td>
+                </tr>',
+                esc_html( $context["from"] )
+            );
+
+        }
+
+        if ( ! empty( $context["to"] ) ) {
+
+            $to_arr = json_decode( $context["to"] );
+            $to_html = "";
+
+            // $one_to = [ address, name ]
+            foreach ( $to_arr as $one_to ) {
+                $to_html .= sprintf( '%1$s, ', esc_html( $one_to[0] ) );
+            }
+
+            $to_html = preg_replace( '!, $!', '', $to_html );
 
             $output .= sprintf(
                 '<tr>
                     <td>To</td>
                     <td>%1$s</td>
                 </tr>',
-                esc_html( $context["email_to"] )
+                $to_html
             );
 
         }
 
-        if ( ! empty( $context["email_subject"] ) ) {
+        if ( ! empty( $context["subject"] ) ) {
 
             $output .= sprintf(
                 '<tr>
                     <td>Subject</td>
                     <td>%1$s</td>
                 </tr>',
-                esc_html( $context["email_subject"] )
+                esc_html( $context["subject"] )
             );
 
         }
 
-        if ( ! empty( $context["email_message"] ) ) {
+        if ( ! empty( $context["body"] ) ) {
 
             $output .= sprintf(
                 '<tr>
                     <td>Body</td>
                     <td>%1$s</td>
                 </tr>',
-                nl2br( esc_html( $context["email_message"] ) )
+                nl2br( esc_html( $context["body"] ) )
             );
 
         }
