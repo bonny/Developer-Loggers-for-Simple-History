@@ -1,6 +1,6 @@
 <?php
 
-class ErrorLogLogger extends SimpleLogger {
+class ErrorLog_Logger extends SimpleLogger {
 
     public $slug = __CLASS__;
 
