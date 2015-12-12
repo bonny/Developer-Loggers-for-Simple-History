@@ -234,12 +234,7 @@ class AvailableUpdatesLogger extends SimpleLogger {
 
         }
 
-        #$output .= "<pre>";
-        // $output .= SimpleHistory::json_encode( $row );
-        #$output .= "</pre>";
         if ( $current_version && $new_version  ) {
-
-            // $output .= '<table class="xxxSimpleHistoryLogitem__keyValueTable"><tbody>';
 
             $output .= '<p>';
             $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
@@ -251,9 +246,11 @@ class AvailableUpdatesLogger extends SimpleLogger {
             $output .= '</span>';
 
             $output .= '</p>';
-            // $output .= '</tr>';
 
-            // $output .= '</tbody></table>';
+            // Add link to update-page
+            $output .= sprintf( '<p><a href="%1$s">', admin_url("update-core.php") );
+            $output .= __( 'View all updates', "simple-history" );
+            $output .= '</a></p>';
 
         }
 
