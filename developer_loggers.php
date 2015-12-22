@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/bonny/Developer-Loggers-for-Simple-History
  * GitHub URI: https://github.com/bonny/Developer-Loggers-for-Simple-History
  * Description: Loggers for Simple History that are useful for developers and admins
- * Version: 0.1
+ * Version: 0.2
  * Author: Pär Thernström
  */
 
