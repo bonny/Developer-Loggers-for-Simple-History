@@ -21,7 +21,9 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 			"description" => "",
 			"capability" => "manage_options",
 			"messages" => array(
-				'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+				//'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
+                'failed_login_whitelisted' => _x( 'Failed login attempts from whitelisted IP', 'simple-history' ),
+                'failed_login' => _x( 'Too many failed login attempts', 'simple-history' ),
                 "cleared_ip_log" => _x( 'Cleared IP log', "Logger: Plugin Limit Login Attempts", "simple-history" ),
                 "reseted_lockout_count" => _x( 'Reseted lockout count', "Logger: Plugin Limit Login Attempts", "simple-history" ),
                 "cleared_current_lockouts" => _x( 'Cleared current lockouts', "Logger: Plugin Limit Login Attempts", "simple-history" ),
@@ -214,9 +216,11 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     	}
 
         if ( $whitelisted ) {
-    		$subject = __( "Failed login attempts from whitelisted IP", 'limit-login-attempts' );
+    		// $subject = __( "Failed login attempts from whitelisted IP", 'limit-login-attempts' );
+            $message_key = "failed_login_whitelisted";
     	} else {
-    		$subject = __( "Too many failed login attempts", 'limit-login-attempts' );
+    		// $subject = __( "Too many failed login attempts", 'limit-login-attempts' );
+            $message_key = "failed_login";
     	}
 
         $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s", 'limit-login-attempts' ), $count, $lockouts, $ip );
@@ -244,7 +248,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
         */
 
-        $this->noticeMessage( "user_locked_out", array(
+        $this->noticeMessage( $message_key, array(
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
             "limit_login_logged" => $limit_login_logged,
