@@ -192,7 +192,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     		 && ( ( $retries[$ip] / limit_login_option( 'allowed_retries' ) )
     			  % limit_login_option( 'notify_email_after' ) ) != 0 ) {
 
-            $this->notice( "user locked out but don't log" );
+            // $this->notice( "user locked out but don't log" );
 
             //return;
     	}
@@ -213,33 +213,37 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     		$when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
     	}
 
-    	$blogname = is_limit_login_multisite() ? get_site_option( 'site_name' ) : get_option( 'blogname' );
-
-
         if ( $whitelisted ) {
-    		$subject = sprintf( __( "[%s] Failed login attempts from whitelisted IP"
-    				      , 'limit-login-attempts' )
-    				   , $blogname );
+    		$subject = __( "Failed login attempts from whitelisted IP", 'limit-login-attempts' );
     	} else {
-    		$subject = sprintf( __( "[%s] Too many failed login attempts"
-    				      , 'limit-login-attempts' )
-    				   , $blogname );
+    		$subject = __( "Too many failed login attempts", 'limit-login-attempts' );
     	}
 
-        $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s"
-    			      , 'limit-login-attempts' ) . "\r\n\r\n"
-    			   , $count, $lockouts, $ip );
-    	if ( $user != '' ) {
-    		$message .= sprintf( __( "Last user attempted: %s", 'limit-login-attempts' )
-    				    . "\r\n\r\n" , $user );
-    	}
+        $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s", 'limit-login-attempts' ), $count, $lockouts, $ip );
+
+        #if ( $user != '' ) {
+    	#	$message .= sprintf( __( "Last user attempted: %s", 'limit-login-attempts' ), $user );
+    	#}
+
     	if ( $whitelisted ) {
     		$message .= __( "IP was NOT blocked because of external whitelist.", 'limit-login-attempts' );
     	} else {
     		$message .= sprintf( __( "IP was blocked for %s", 'limit-login-attempts' ), $when );
     	}
 
-        //noticeMessage
+        /*
+        Subjects
+        $subject = __( "Failed login attempts from whitelisted IP", 'limit-login-attempts' );
+        $subject = __( "Too many failed login attempts", 'limit-login-attempts' );
+
+        Messages
+        $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s", 'limit-login-attempts' ), $count, $lockouts, $ip );
+        $message .= sprintf( __( "Last user attempted: %s", 'limit-login-attempts' ), $user );
+        $message .= __( "IP was NOT blocked because of external whitelist.", 'limit-login-attempts' );
+        $message .= sprintf( __( "IP was blocked for %s", 'limit-login-attempts' ), $when );
+
+        */
+
         $this->noticeMessage( "user_locked_out", array(
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
