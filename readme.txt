@@ -43,6 +43,10 @@ Log all messages from Simple History to the syslog on the server. With this logg
 
 ## Changelog
 
+= 0.2 (December 2015) =
+
+- Changes to Limit Login Attempts.
+
 = 0.1 (December 2015) =
 
 - First public version. Enjoy!
