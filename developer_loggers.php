@@ -92,6 +92,8 @@ class SimpleHistory_DeveloperLoggers {
 
         $settings = update_option( "{$this->slug}_settings", $settings );
 
+        do_action( "simple_history/developer_loggers/save_settings" );
+
     }
 
     function get_settings() {
@@ -176,9 +178,9 @@ class SimpleHistory_DeveloperLoggers {
         }
 
         // Sort by name
-        usort($arr_loggers_info, function( $a, $b ) {
+        usort( $arr_loggers_info, function( $a, $b ) {
             return strcmp( $a["info"]["name"], $b["info"]["name"] );
-        });
+        } );
 
         return $arr_loggers_info;
 
@@ -187,9 +189,9 @@ class SimpleHistory_DeveloperLoggers {
     function add_settings_tab() {
 
         $this->simpleHistory->registerSettingsTab( array(
-                        "slug" => $this->slug,
-                        "name" => __( "Developer loggers", "simple-history" ),
-                        "function" => array( $this, "settings_output" ),
+            "slug" => $this->slug,
+            "name" => __( "Developer loggers", "simple-history" ),
+            "function" => array( $this, "settings_output" ),
         ) );
 
     }

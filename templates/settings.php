@@ -5,11 +5,16 @@
 
         <?php
 
+        do_action( "simple_history/developer_loggers/before_plugins_table" );
+
         $available_loggers = $this->get_available_loggers();
 
         if ( $available_loggers ) {
 
             printf('
+
+                <h2>%4$s</h2>
+
                 <table class="widefat wp-list-table plugins">
                     <thead>
                         <tr>
@@ -22,7 +27,8 @@
                 ',
                 __("Name", "simple-history"),
                 __("Description", "simple-history"),
-                __("Enabled", "simple-history")
+                __("Enabled", "simple-history"),
+                __("Enabled loggers and plugins", "simple-history")
             );
 
             foreach ( $available_loggers as $logger ) {
@@ -55,10 +61,13 @@
             ');
 
         } // if available loggers
+
+        do_action( "simple_history/developer_loggers/after_plugins_table" );
+
         ?>
 
-
         <input type="hidden" name="<?php echo $this->slug ?>_action" value="save_settings">
+
         <?php
 
         wp_nonce_field( 'save_settings', "{$this->slug}_nonce" );
