@@ -16,7 +16,7 @@ That are useful for developers during development of a site or to maintain a liv
 
 = Included loggers and plugins =
 
-**Slack poster**
+**Post to Slack**
 
 All your events is posted to a [Slack](https://slack.com/) channel of your choice, using an [incoming webhook](https://api.slack.com/incoming-webhooks). Yes, with this plugin enabled
 there is no need what so ever to ever leave Slack to see what's happening on your site or the site of your
