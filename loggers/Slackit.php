@@ -177,7 +177,6 @@
 
          // Contains both user and date, too much info?
          $header_html = $logger->getLogRowHeaderOutput( $row );
-         //echo $header_html;exit;
          $plain_text_html = $logger->getLogRowPlainTextOutput( $row );
          $sender_image_html = "";
 
@@ -237,7 +236,7 @@
 
          $arr_slack_data = array(
              "username" => "WordPress Simple History",
-             "icon_url" => "https://simple-history.com/assets/uploads/2014/12/icon-5121-548c6e42_site_icon-32x32.png",
+             "icon_url" => "http://simple-history.s3-website.eu-central-1.amazonaws.com/images/simple-history-icon-32.png",
              //"text" => html_entity_decode( strip_tags( $plain_text_html ) ), // 'An event was logged',
              "attachments" => array(
                  array(
