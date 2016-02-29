@@ -4,7 +4,7 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.4
-Stable tag: 0.3
+Stable tag: 0.3.1
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -51,6 +51,11 @@ Log all messages from Simple History to the syslog on the server. With this logg
 == Changelog ==
 
 ## Changelog
+
+= 0.3.1 (March 2016) =
+
+- Fixed: Function `__return_empty_string` is not called `_return_empty_string`...
+- Fixed: Undefined notice for `$initiator_text` in the post to Slack plugin
 
 = 0.3 (February 2016) =
 
