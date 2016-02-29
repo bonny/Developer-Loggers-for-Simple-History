@@ -171,14 +171,16 @@
          // + Disable relative time output in header
          // @TODO: remove these filters when our function calls are done
          add_filter( "simple_history/header_initiator_use_you", "__return_false" );
+         add_filter( "simple_history/user_logger/plain_text_output_use_you", "__return_false" );
 
          // Remove the date part of the section, because slack also shows date
-         add_filter( "simple_history/row_header_date_output", "_return_empty_string" );
+         add_filter( "simple_history/row_header_date_output", "__return_empty_string" );
 
          // Contains both user and date, too much info?
          $header_html = $logger->getLogRowHeaderOutput( $row );
          $plain_text_html = $logger->getLogRowPlainTextOutput( $row );
          $sender_image_html = "";
+         $initiator_text = "";
 
          switch ( $initiator ) {
 

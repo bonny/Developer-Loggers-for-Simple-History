@@ -43,6 +43,24 @@ class SystemLog_Logger extends SimpleLogger {
             $message // 4
         );
 
+        // Ok you developer moron: http://php.net/manual/en/function.syslog.php is the one to use, including log levels!
+        /*
+         bool syslog ( int $priority , string $message )
+         LOG_EMERG	system is unusable
+         LOG_ALERT	action must be taken immediately
+         LOG_CRIT	critical conditions
+         LOG_ERR	error conditions
+         LOG_WARNING	warning conditions
+         LOG_NOTICE	normal, but significant, condition
+         LOG_INFO	informational message
+         LOG_DEBUG	debug-level message
+
+         The message to send, except that the two characters %m will be replaced by the error message string (strerror) corresponding to the present value of errno.
+
+
+         */
+
+
         error_log( $log_message );
 
         // Comment out this to store some more debug info

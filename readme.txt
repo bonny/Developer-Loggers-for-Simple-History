@@ -4,7 +4,7 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.4
-Stable tag: 0.2
+Stable tag: 0.3.1
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -16,7 +16,7 @@ That are useful for developers during development of a site or to maintain a liv
 
 = Included loggers and plugins =
 
-**Slack poster**
+**Post to Slack**
 
 All your events is posted to a [Slack](https://slack.com/) channel of your choice, using an [incoming webhook](https://api.slack.com/incoming-webhooks). Yes, with this plugin enabled
 there is no need what so ever to ever leave Slack to see what's happening on your site or the site of your
@@ -52,11 +52,15 @@ Log all messages from Simple History to the syslog on the server. With this logg
 
 ## Changelog
 
+= 0.3.1 (March 2016) =
+
+- Fixed: Function `__return_empty_string` is not called `_return_empty_string`...
+- Fixed: Undefined notice for `$initiator_text` in the post to Slack plugin
+
 = 0.3 (February 2016) =
 
 - Added: New plugin: Slack! Yes, now all your logged events can be posted to a Slack channel of your choice.
 - Added: Actions `simple_history/developer_loggers/before_plugins_table` and `simple_history/developer_loggers/before_plugins_table`.
-
 
 = 0.2 (December 2015) =
 
