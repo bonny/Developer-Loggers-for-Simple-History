@@ -52,6 +52,11 @@ Log all messages from Simple History to the syslog on the server. With this logg
 
 ## Changelog
 
+= 0.3.x (March 2016) =
+
+- Fixed: The logger for available updates could throw a fatal error on the plugin install screen. Hopefully fixed now, and if
+then it fixes https://github.com/bonny/Developer-Loggers-for-Simple-History/issues/1 (the very first issue for this plugin! 🎉).
+
 = 0.3.1 (March 2016) =
 
 - Fixed: Function `__return_empty_string` is not called `_return_empty_string`...
