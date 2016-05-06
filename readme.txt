@@ -59,7 +59,7 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
-= 0.3.2 (March 2016) =
+= 0.3.2 (May 2016) =
 
 - Added: Logger HTTP API Logger that logs all GET and POST requests made using for example `wp_remote_get()` and `wp_remote_post()`.
 - Fixed: The logger for available updates could throw a fatal error on the plugin install screen. Hopefully fixed now, and if
