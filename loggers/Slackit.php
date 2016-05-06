@@ -105,6 +105,11 @@
 
      function on_log_insert_context_slackit( $context, $data, $logger ) {
 
+        // do not log messages from HTTP_logger, beacuse that would cause infinite loops
+        if ( isset( $logger->slug ) && $logger->slug == "HTTP_Logger" ) {
+            return $context;
+        }
+
         $settings = $this->get_settings();
         $slack_webhook_url = isset( $settings["webhook_url"] ) ? $settings["webhook_url"] : "";
 

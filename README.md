@@ -23,3 +23,15 @@ See what JavaScript errors users that visit your site is getting.
 **SystemLog logger**  
 Log all messages from Simple History to the syslog on the server.
 With this logger enabled there is no need to use the beautiful GUI of Simple History ;).
+
+**Available updates logger**
+
+**BackUpWordPress**
+
+**ErrorLog logger**
+
+**Limit Login Attempts**
+
+**HTTP API logger**
+
+Log all usage of HTTP calls from functions like wp_remote_post() and wp_remote_get().

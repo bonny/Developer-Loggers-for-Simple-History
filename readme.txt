@@ -3,8 +3,8 @@ Contributors: eskapism
 Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
-Tested up to: 4.4
-Stable tag: 0.3.1
+Tested up to: 4.5
+Stable tag: 0.3.2
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -38,6 +38,13 @@ See what JavaScript errors users that visit your site is getting.
 
 Log all messages from Simple History to the syslog on the server. With this logger enabled there is no need to use the beautiful GUI of Simple History ;).
 
+**HTTP API logger**
+
+Log all usage of HTTP calls from functions like wp_remote_post() and wp_remote_get().
+
+You can the URL requested, the arguments posted and the full returned result, including server headers.
+
+The time for the request to complete is also logged. Great for debugging!
 
 == Screenshots ==
 
@@ -51,6 +58,12 @@ Log all messages from Simple History to the syslog on the server. With this logg
 == Changelog ==
 
 ## Changelog
+
+= 0.3.2 (March 2016) =
+
+- Added: Logger HTTP API Logger that logs all GET and POST requests made using for example `wp_remote_get()` and `wp_remote_post()`.
+- Fixed: The logger for available updates could throw a fatal error on the plugin install screen. Hopefully fixed now, and if
+then it fixes https://github.com/bonny/Developer-Loggers-for-Simple-History/issues/1 (the very first issue for this plugin! 🎉).
 
 = 0.3.1 (March 2016) =
 

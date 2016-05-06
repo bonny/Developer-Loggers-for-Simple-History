@@ -105,13 +105,14 @@ class AvailableUpdatesLogger extends SimpleLogger {
         }
 
         // File needed plugin API
-        require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+        if ( ! function_exists("get_plugin_data") ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
 
         // For each available update
         foreach ( $updates->response as $key => $data ) {
 
             $plugin_info = get_plugin_data( WP_PLUGIN_DIR . "/" . $key );
-            //$remote_plugin_info = plugins_api( 'plugin_information', array( 'slug' => $data->slug ) );
 
             $plugin_new_version = isset( $data->new_version ) ? $data->new_version : "";
 
