@@ -54,6 +54,11 @@ The time for the request to complete is also logged. Great for debugging!
 
 3. Example output of the WPMail logger. You can see the subject, who the mail is sent to, and the contents of the body.
 
+4. Example output form the HTTP API logger. View method and target URL.
+
+5. Details from the HTTP API logger. Even more details here, like all the headers in the response and also the full response.
+
+6. Example output from the WordPress post to Slack Logger. Here you can see me failing to login, then succeeding to login, updating a plugin, and finally I log out.
 
 == Changelog ==
 
