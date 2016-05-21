@@ -322,7 +322,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             }
 
             #if ( $whitelisted ) {
-                $output .= "<p>" . __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' ) . "</p>";
+            #$output .= "<p>" . __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' ) . "</p>";
             #} else {
                 $output .= "<p>" . sprintf( 
                     __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
