@@ -13,7 +13,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 		$arr_info = array(
 			"name" => "Plugin Limit Login Attempts",
 			"description" => "",
-            "name_via" => _x("Using plugin Limit Login Attempts", "PluginLimitLoginAttempts", "simple-history"),
+            "name_via" => _x("Using plugin Limit Login Attempts", "Logger: Plugin Limit Login Attempts", "simple-history"),
 			"capability" => "manage_options",
 			"messages" => array(
 				//'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
@@ -205,7 +205,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     		$count = limit_login_option( 'allowed_retries' ) * limit_login_option( 'allowed_lockouts' );
     		$lockouts = limit_login_option( 'allowed_lockouts' );
     		$time = round( limit_login_option( 'long_duration' ) / 3600 );
-    		$when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
+    		#$when = sprintf( _n( '%d hour', '%d hours', $time, "Logger: Plugin Limit Login Attempts", 'limit-login-attempts' ), $time );
     	} else {
     		/* normal lockout */
             $lockout_type = "normal";
@@ -306,7 +306,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             $time = $context["time"];
 
             $output .= sprintf(
-                "<p>" . __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %3$s', 'limit-login-attempts' ) . "</p>", 
+                "<p>" . _x( '%1$d failed login attempts (%2$d lockout(s)) from IP: %3$s', 'Logger: Plugin Limit Login Attempts', 'simple-history' ) . "</p>", 
                 $count, // 1
                 $lockouts,  // 2
                 $ip // 3
@@ -314,11 +314,11 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
             if ( "longer" == $lockout_type ) {
 
-                $when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
+                $when = sprintf( _nx( '%d hour', '%d hours', $time, 'Logger: Plugin Limit Login Attempts', 'limit-login-attempts' ), $time );
 
             } else if ( "normal" == $lockout_type ) {
 
-                $when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
+                $when = sprintf( _nx( '%d minute', '%d minutes', $time, 'Logger: Plugin Limit Login Attempts', 'limit-login-attempts' ), $time );
 
             }
 
@@ -326,7 +326,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             #$output .= "<p>" . __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' ) . "</p>";
             #} else {
                 $output .= "<p>" . sprintf( 
-                    __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
+                    _x( 'IP was blocked for %1$s', 'Logger: Plugin Limit Login Attempts', 'simple-history' ), 
                     $when // 1
                 ) . "</p>";
             #}
