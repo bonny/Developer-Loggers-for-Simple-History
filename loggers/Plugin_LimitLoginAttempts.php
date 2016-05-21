@@ -293,37 +293,42 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
         $context = isset( $row->context ) ? $row->context : array();
 
-        $count = $context["count"];
-        $lockouts = $context["lockouts"];
-        $ip = $context["ip"];
-        $whitelisted = $context["whitelisted"];
-        $lockout_type = $context["lockout_type"];
-        $time = $context["time"];
+        $message_key = $row->context_message_key;
 
-        $output .= sprintf(
-            __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %1$s', 'limit-login-attempts' ), 
-            $count, // 1
-            $lockouts,  // 2
-            $ip // 3
-        );
+        if ( "failed_login" == $message_key ) {
 
-        if ( "longer" == $lockout_type ) {
+            $count = $context["count"];
+            $lockouts = $context["lockouts"];
+            $ip = $context["ip"];
+            $whitelisted = $context["whitelisted"];
+            $lockout_type = $context["lockout_type"];
+            $time = $context["time"];
 
-            $when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
-
-        } else if ( "normal" == $lockout_type ) {
-
-            $when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
-
-        }
-
-        if ( $whitelisted ) {
-            $output .= __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' );
-        } else {
-            $output .= sprintf( 
-                __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
-                $when // 1
+            $output .= sprintf(
+                __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %1$s', 'limit-login-attempts' ), 
+                $count, // 1
+                $lockouts,  // 2
+                $ip // 3
             );
+
+            if ( "longer" == $lockout_type ) {
+
+                $when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
+
+            } else if ( "normal" == $lockout_type ) {
+
+                $when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
+
+            }
+
+            if ( $whitelisted ) {
+                $output .= __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' );
+            } else {
+                $output .= sprintf( 
+                    __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
+                    $when // 1
+                );
+            }
         }
 
         return $output;
