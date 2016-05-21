@@ -249,6 +249,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
         */
 
         $this->noticeMessage( $message_key, array(
+            "_initiator" => SimpleLoggerLogInitiators::WEB_USER,
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
             "retries" => $retries,
