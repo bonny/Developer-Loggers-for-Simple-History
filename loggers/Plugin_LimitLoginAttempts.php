@@ -17,8 +17,8 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 			"capability" => "manage_options",
 			"messages" => array(
 				//'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
-                'failed_login_whitelisted' => _x( 'Failed login attempts from whitelisted IP', 'simple-history' ),
-                'failed_login' => _x( 'Too many failed login attempts', 'simple-history' ),
+                'failed_login_whitelisted' => _x( 'Failed login attempt from whitelisted IP', "Logger: Plugin Limit Login Attempts", 'simple-history' ),
+                'failed_login' => _x( 'Was locked out because too many failed login attempts', "Logger: Plugin Limit Login Attempts", 'simple-history' ),
                 "cleared_ip_log" => _x( 'Cleared IP log', "Logger: Plugin Limit Login Attempts", "simple-history" ),
                 "reseted_lockout_count" => _x( 'Reseted lockout count', "Logger: Plugin Limit Login Attempts", "simple-history" ),
                 "cleared_current_lockouts" => _x( 'Cleared current lockouts', "Logger: Plugin Limit Login Attempts", "simple-history" ),
@@ -167,6 +167,11 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
 
     }
 
+    /**
+     * When option value is updated
+     * do same checks as plugin itself does
+     * and log if we match something
+     */
     function on_option_limit_login_lockouts_total( $value ) {
 
         global $limit_login_just_lockedout;
@@ -193,14 +198,17 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     	}
 
         /* Format message. First current lockout duration */
+        $lockout_type = "";
     	if ( ! isset( $retries[$ip] ) ) {
     		/* longer lockout */
+            $lockout_type = "longer";
     		$count = limit_login_option( 'allowed_retries' ) * limit_login_option( 'allowed_lockouts' );
     		$lockouts = limit_login_option( 'allowed_lockouts' );
     		$time = round( limit_login_option( 'long_duration' ) / 3600 );
     		$when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
     	} else {
     		/* normal lockout */
+            $lockout_type = "normal";
     		$count = $retries[$ip];
     		$lockouts = floor( $count / limit_login_option( 'allowed_retries' ) );
     		$time = round( limit_login_option( 'lockout_duration' ) / 60 );
@@ -248,7 +256,10 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             //"subject" => $subject,
             //"message" => $message,
             "count" => $count, // num of failed login attempts before block
-            "time" => $time // duration in minutes for block
+            "time" => $time, // duration in minutes for block
+            "lockouts" => $lockouts,
+            "ip" => $ip,
+            "lockout_type" => $lockout_type
         ) );
 
         return $value;
@@ -272,5 +283,51 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     $limit_login_just_lockedout = true;
 
     */
+
+    /**
+     * Add some extra info
+     */
+    function getLogRowDetailsOutput( $row ) {
+
+        $output = "";
+
+        $context = isset( $row->context ) ? $row->context : array();
+
+        $count = $context["count"];
+        $lockouts = $context["lockouts"];
+        $ip = $context["ip"];
+        $whitelisted = $context["whitelisted"];
+        $lockout_type = $context["lockout_type"];
+        $time = $context["time"];
+
+        $output .= sprintf(
+            __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %1$s', 'limit-login-attempts' ), 
+            $count, // 1
+            $lockouts,  // 2
+            $ip // 3
+        );
+
+        if ( "longer" == $lockout_type ) {
+
+            $when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
+
+        } else if ( "normal" == $lockout_type ) {
+
+            $when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
+
+        }
+
+        if ( $whitelisted ) {
+            $output .= __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' );
+        } else {
+            $output .= sprintf( 
+                __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
+                $when // 1
+            );
+        }
+
+        return $output;
+
+    }
 
 }
