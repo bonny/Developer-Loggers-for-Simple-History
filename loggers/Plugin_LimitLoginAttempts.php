@@ -252,7 +252,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             "_initiator" => SimpleLoggerLogInitiators::WEB_USER,
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
-            "retries" => $retries,
+            //"retries" => $retries,
             //"whitelisted" => $whitelisted, // bool, true | false
             //"subject" => $subject,
             //"message" => $message,
