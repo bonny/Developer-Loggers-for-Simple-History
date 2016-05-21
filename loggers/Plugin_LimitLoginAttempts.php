@@ -1,24 +1,19 @@
 <?php
 
 /**
+ * Logger for the (old but still) very popular plugin Limit Login Attempts
+ * https://sv.wordpress.org/plugins/limit-login-attempts/
  */
 class Plugin_LimitLoginAttempts extends SimpleLogger {
 
-    /**
-     * The slug is ised to identify this logger in various places.
-     * We use the name of the class too keep it simple.
-     */
     public $slug = __CLASS__;
 
-    /**
-	 * Return information about this logger.
-     * Used to show info about the logger at various places.
-	 */
 	function getInfo() {
 
 		$arr_info = array(
 			"name" => "Plugin Limit Login Attempts",
 			"description" => "",
+            "name_via" => _x("Using plugin Limit Login Attempts", "PluginLimitLoginAttempts", "simple-history"),
 			"capability" => "manage_options",
 			"messages" => array(
 				//'user_locked_out' => _x( 'User locked out', "Logger: Plugin Limit Login Attempts", "simple-history" ),
@@ -183,16 +178,14 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
         $ip = limit_login_get_address();
     	$whitelisted = is_limit_login_ip_whitelisted( $ip );
 
-        $limit_login_logged = get_option( 'limit_login_logged' );
+        // $limit_login_logged = get_option( 'limit_login_logged' );
 
         $retries = get_option( 'limit_login_retries' );
         if ( ! is_array( $retries ) ) {
     		$retries = array();
     	}
 
-        if ( isset( $retries[$ip] )
-    		 && ( ( $retries[$ip] / limit_login_option( 'allowed_retries' ) )
-    			  % limit_login_option( 'notify_email_after' ) ) != 0 ) {
+        if ( isset( $retries[$ip] ) && ( ( $retries[$ip] / limit_login_option( 'allowed_retries' ) ) % limit_login_option( 'notify_email_after' ) ) != 0 ) {
 
             // $this->notice( "user locked out but don't log" );
 
@@ -202,8 +195,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
         /* Format message. First current lockout duration */
     	if ( ! isset( $retries[$ip] ) ) {
     		/* longer lockout */
-    		$count = limit_login_option( 'allowed_retries' )
-    			* limit_login_option( 'allowed_lockouts' );
+    		$count = limit_login_option( 'allowed_retries' ) * limit_login_option( 'allowed_lockouts' );
     		$lockouts = limit_login_option( 'allowed_lockouts' );
     		$time = round( limit_login_option( 'long_duration' ) / 3600 );
     		$when = sprintf( _n( '%d hour', '%d hours', $time, 'limit-login-attempts' ), $time );
@@ -212,7 +204,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
     		$count = $retries[$ip];
     		$lockouts = floor( $count / limit_login_option( 'allowed_retries' ) );
     		$time = round( limit_login_option( 'lockout_duration' ) / 60 );
-    		$when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
+    		//$when = sprintf( _n( '%d minute', '%d minutes', $time, 'limit-login-attempts' ), $time );
     	}
 
         if ( $whitelisted ) {
@@ -223,17 +215,17 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             $message_key = "failed_login";
     	}
 
-        $message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s", 'limit-login-attempts' ), $count, $lockouts, $ip );
+        #$message = sprintf( __( "%d failed login attempts (%d lockout(s)) from IP: %s", 'limit-login-attempts' ), $count, $lockouts, $ip );
 
         #if ( $user != '' ) {
     	#	$message .= sprintf( __( "Last user attempted: %s", 'limit-login-attempts' ), $user );
     	#}
 
-    	if ( $whitelisted ) {
-    		$message .= __( "IP was NOT blocked because of external whitelist.", 'limit-login-attempts' );
-    	} else {
-    		$message .= sprintf( __( "IP was blocked for %s", 'limit-login-attempts' ), $when );
-    	}
+    	#if ( $whitelisted ) {
+    		#$message .= __( "IP was NOT blocked because of external whitelist.", 'limit-login-attempts' );
+    	#} else {
+    		#$message .= sprintf( __( "IP was blocked for %s", 'limit-login-attempts' ), $when );
+    	#}
 
         /*
         Subjects
@@ -251,11 +243,12 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
         $this->noticeMessage( $message_key, array(
             "value" => $value,
             "limit_login_just_lockedout" => $limit_login_just_lockedout,
-            "limit_login_logged" => $limit_login_logged,
             "retries" => $retries,
-            "whitelisted" => $whitelisted,
-            "subject" => $subject,
-            "message" => $message
+            "whitelisted" => $whitelisted, // bool, true | false
+            //"subject" => $subject,
+            //"message" => $message,
+            "count" => $count, // num of failed login attempts before block
+            "time" => $time // duration in minutes for block
         ) );
 
         return $value;
