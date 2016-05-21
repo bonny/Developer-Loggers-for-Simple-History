@@ -305,7 +305,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             $time = $context["time"];
 
             $output .= sprintf(
-                __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %1$s', 'limit-login-attempts' ), 
+                __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %3$s', 'limit-login-attempts' ), 
                 $count, // 1
                 $lockouts,  // 2
                 $ip // 3
