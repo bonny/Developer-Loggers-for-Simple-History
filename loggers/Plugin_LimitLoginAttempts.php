@@ -305,7 +305,7 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             $time = $context["time"];
 
             $output .= sprintf(
-                __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %3$s', 'limit-login-attempts' ), 
+                "<p>" . __( '%1$d failed login attempts (%2$d lockout(s)) from IP: %3$s', 'limit-login-attempts' ) . "</p>", 
                 $count, // 1
                 $lockouts,  // 2
                 $ip // 3
@@ -322,12 +322,12 @@ class Plugin_LimitLoginAttempts extends SimpleLogger {
             }
 
             #if ( $whitelisted ) {
-                $output .= __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' );
+                $output .= "<p>" . __( 'IP was NOT blocked because of external whitelist.', 'limit-login-attempts' ) . "</p>";
             #} else {
-                $output .= sprintf( 
+                $output .= "<p>" . sprintf( 
                     __( 'IP was blocked for %1$s', 'limit-login-attempts' ), 
                     $when // 1
-                );
+                ) . "</p>";
             #}
         }
 
