@@ -64,6 +64,10 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
+= 0.3.x (nnn 2016) =
+
+- Fixed: Notice warning in post to Slack
+
 = 0.3.2 (May 2016) =
 
 - Added: Logger HTTP API Logger that logs all GET and POST requests made using for example `wp_remote_get()` and `wp_remote_post()`.

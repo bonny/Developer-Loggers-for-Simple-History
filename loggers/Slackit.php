@@ -184,6 +184,7 @@
          // Contains both user and date, too much info?
          $header_html = $logger->getLogRowHeaderOutput( $row );
          $plain_text_html = $logger->getLogRowPlainTextOutput( $row );
+         $sender_image = "";
          $sender_image_html = "";
          $initiator_text = "";
 
