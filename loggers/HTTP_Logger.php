@@ -63,7 +63,7 @@
                  '_url' => $url,
              ];
 
-         $this->debug("http_api_debug: '{request_method}' request to '{url}' (took {time_taken} ms)", $context);
+         $this->debug("http_api_debug: '{request_method}' request to '{url}' (took {time_taken} s)", $context);
 
      }
 
