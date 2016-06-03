@@ -1,8 +1,7 @@
 <?php
 
  /**
-  * Post to slack yo
-  * Not really a logger, since it does not log anything, but it's more easy to maintain if we pretend it is.. :).
+  * Log calls to the HTTP API
   */
  class HTTP_Logger extends SimpleLogger
  {
