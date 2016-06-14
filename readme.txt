@@ -1,10 +1,11 @@
+changelog
 === Developer Loggers for Simple History ===
 Contributors: eskapism
 Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 0.3.2
+Stable tag: 0.3.3
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -25,6 +26,7 @@ clients or... well, on any site where you have Simple Histor and this plugin ena
 **WP_Mail-logger**
 
 See all mails sent with wp_mail(), no matter what the recipient address is.
+changelog
 
 **404 logger**
 
@@ -64,9 +66,10 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
-= 0.3.x (nnn 2016) =
+= 0.3.3 (June 2016) =
 
-- Fixed: Notice warning in post to Slack
+- Fixed notice warning in post to Slack
+- Add error message if not running PHP 5.3 or higher
 
 = 0.3.2 (May 2016) =
 
