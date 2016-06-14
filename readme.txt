@@ -70,6 +70,7 @@ The time for the request to complete is also logged. Great for debugging!
 
 - Fixed notice warning in post to Slack
 - Add error message if not running PHP 5.3 or higher
+- Change unit in HTTP API message from milliseconds to seconds
 
 = 0.3.2 (May 2016) =
 
