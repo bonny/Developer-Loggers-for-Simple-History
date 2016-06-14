@@ -1,11 +1,10 @@
-changelog
 === Developer Loggers for Simple History ===
 Contributors: eskapism
 Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 0.3.3
+Stable tag: 0.3.4
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -66,7 +65,7 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
-= 0.3.x (June 2016) =
+= 0.3.4 (June 2016) =
 
 - Bump up requirement to 5.4 because I'm to tired to write code for 5.3
 
