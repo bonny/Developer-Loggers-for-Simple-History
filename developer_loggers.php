@@ -8,7 +8,7 @@
  * Author: Pär Thernström
  */
 
-if ( version_compare( phpversion(), "5.3", ">=") ) {
+if ( version_compare( phpversion(), "5.4", ">=") ) {
 
     // ok
     include_once( __DIR__ . "/class.php" );
@@ -38,7 +38,7 @@ if ( version_compare( phpversion(), "5.3", ">=") ) {
             <p><?php
 
                 printf(
-                    __( 'Developer Loggers for Simple History requires at least PHP 5.3 (you have version %s).', 'simple-history' ),
+                    __( 'Developer Loggers for Simple History requires at least PHP 5.4 (you have version %s).', 'simple-history' ),
                     phpversion()
                 );
 

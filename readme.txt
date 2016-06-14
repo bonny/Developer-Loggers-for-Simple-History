@@ -66,6 +66,10 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
+= 0.3.x (June 2016) =
+
+- Bump up requirement to 5.4 because I'm to tired to write code for 5.3
+
 = 0.3.3 (June 2016) =
 
 - Fixed notice warning in post to Slack
