@@ -3,6 +3,10 @@
 Loggers for [WordPress event logger plugin Simple History](http://simple-history.com)
 that are useful for developers during development of a site or to maintain a live site.
 
+## Download
+
+Download the plugin from https://wordpress.org/plugins/developer-loggers-for-simple-history/ or directly from your WordPress admin panel.
+
 ## Included plugins and loggers
 
 **Post to Slack**
