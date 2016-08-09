@@ -237,7 +237,7 @@ if ( ! class_exists("AvailableUpdatesLogger") ) {
 
                 $output .= '<p>';
                 $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
-                $output .= "<em>" . __( 'Version available', "simple-history" ) . "</em> " . esc_html( $new_version );
+                $output .= "<em>" . __( 'Available version', "simple-history" ) . "</em> " . esc_html( $new_version );
                 $output .= '</span> ';
 
                 $output .= '<span class="SimpleHistoryLogitem__inlineDivided">';
