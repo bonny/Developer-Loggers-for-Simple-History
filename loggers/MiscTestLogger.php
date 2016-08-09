@@ -20,6 +20,10 @@ class MiscTestLogger extends SimpleLogger {
 
     function loaded() {
 
+        if ( ! function_exists("sys_getloadavg") ) {
+            return;
+        }
+
         add_action("xinit", function() {
 
         	$load = sys_getloadavg(); // 1, 5, 15

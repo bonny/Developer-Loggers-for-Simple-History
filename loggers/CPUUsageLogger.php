@@ -20,6 +20,12 @@ class CPUUsageLogger extends SimpleLogger {
 
     function loaded() {
 
+        // sys_getloadav() does not exist in windows, so don't do anything if it does not exist
+        // https://wordpress.org/support/topic/sys_getloadavg-php-windows
+        if ( ! function_exists("sys_getloadavg") ) {
+            return;
+        }
+
         add_action("init", array( $this, "log_usage" ), 10, 2);
 
     }

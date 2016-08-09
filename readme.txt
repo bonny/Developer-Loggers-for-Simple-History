@@ -4,7 +4,7 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 0.4
+Stable tag: 0.4.1
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -65,6 +65,10 @@ The time for the request to complete is also logged. Great for debugging!
 == Changelog ==
 
 ## Changelog
+
+= 0.4.1 (August 2016) =
+
+- Check that the `sys_getloadavg()` exists before trying to use. Could cause error on Windows.
 
 = 0.4 (August 2016) =
 
