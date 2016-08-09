@@ -61,9 +61,15 @@ The time for the request to complete is also logged. Great for debugging!
 
 6. Example output from the WordPress post to Slack Logger. Here you can see me failing to login, then succeeding to login, updating a plugin, and finally I log out.
 
+
 == Changelog ==
 
 ## Changelog
+
+= 0.4 (August 2016) =
+
+- Logger for Limit Logins Attempts has moved to Simple History, so more users can benefit from it.
+- When a plugin update is found: use the english name for the plugin, instead of the translated name.
 
 = 0.3.4 (June 2016) =
 
