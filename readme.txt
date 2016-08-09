@@ -4,7 +4,7 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 0.3.4
+Stable tag: 0.4
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
