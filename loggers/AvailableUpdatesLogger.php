@@ -31,7 +31,7 @@ if ( ! class_exists("AvailableUpdatesLogger") ) {
 
         function loaded() {
 
-            // When WP is done checking for core udptes it sets a site transient called "update_core"
+            // When WP is done checking for core updates it sets a site transient called "update_core"
             // set_site_transient( 'update_core', null ); // Uncomment to test
             add_action( "set_site_transient_update_core", array( $this, "on_setted_update_core_transient" ), 10, 1 );
 
