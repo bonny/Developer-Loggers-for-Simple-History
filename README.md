@@ -25,4 +25,6 @@ Download the plugin from https://wordpress.org/plugins/developer-loggers-for-sim
 
 Log all usage of HTTP calls from functions like wp_remote_post() and wp_remote_get().
 
+## Screenshots and more info
+
 [Check out the plugin page at wordpress.org for more details, including screenshots.](https://wordpress.org/plugins/developer-loggers-for-simple-history/)
