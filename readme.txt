@@ -66,6 +66,10 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
+= 0.4.x (August 2016) =
+
+- Add notice in admin that [Simple History](https://simple-history.com) must be installed and activated to use this plugin.
+
 = 0.4.1 (August 2016) =
 
 - Check that the `sys_getloadavg()` exists before trying to use. Could cause error on Windows.
