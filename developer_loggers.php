@@ -47,7 +47,6 @@ if ( version_compare( phpversion(), "5.4", ">=") ) {
 
     } );
 
-
 } else {
 
     // not ok
