@@ -3,6 +3,10 @@
 Loggers for [WordPress event logger plugin Simple History](http://simple-history.com)
 that are useful for developers during development of a site or to maintain a live site.
 
+[![Build Status](https://travis-ci.org/bonny/Developer-Loggers-for-Simple-History.svg?branch=master)](https://travis-ci.org/bonny/Developer-Loggers-for-Simple-History)
+![Rating at wordpress.org](https://img.shields.io/wordpress/plugin/r/developer-loggers-for-simple-history.svg)
+![Number of downloads](https://img.shields.io/wordpress/plugin/dt/developer-loggers-for-simple-history.svg)
+
 ## Download
 
 Download the plugin from https://wordpress.org/plugins/developer-loggers-for-simple-history/ or directly from your WordPress admin panel.
