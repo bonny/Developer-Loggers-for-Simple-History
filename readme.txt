@@ -70,6 +70,7 @@ The time for the request to complete is also logged. Great for debugging!
 
 - Add notice in admin that [Simple History](https://simple-history.com) must be installed and activated to use this plugin.
 - Add some very basic Travis CI tests, so the plugin is less likely to cause any obvious errors.
+- The Available Updates Logger has not moved to the Simple History plugin, because it's useful for most users and not only admins.
 
 = 0.4.1 (August 2016) =
 

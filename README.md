@@ -18,8 +18,7 @@ Download the plugin from https://wordpress.org/plugins/developer-loggers-for-sim
  - 404 logger  
  - JavaScript error logger  
  - SystemLog logger  
- - Available updates logger
- - BackUpWordPress
+  - BackUpWordPress
  - ErrorLog logger
  - HTTP API logger
 
