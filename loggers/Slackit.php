@@ -63,7 +63,16 @@
              $settings = array();
          }
 
-         return $settings;
+        /**
+         * Filter to modify the settings of the slackit logger
+         * Setting is array with info like:
+         * Array (
+         *  [webhook_url] => "https://hooks.slack.com/services/blabla/buhu/woopwoop"
+         * )
+         */
+        $settings = apply_filters( "simple_history/developer_loggers/slackit/settings", $settings );
+
+        return $settings;
 
      }
 
