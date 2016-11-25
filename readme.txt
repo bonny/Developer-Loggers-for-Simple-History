@@ -4,7 +4,7 @@ Donate link: http://eskapism.se/sida/donate/
 Tags: simple history, developer, admins, administrators, email, debug, wp_mail,
 Requires at least: 4.4
 Tested up to: 4.5
-Stable tag: 0.4.1
+Stable tag: 0.5
 
 Useful loggers for SimpleHistory for developers during development of a site or to maintain a live site.
 
@@ -66,7 +66,7 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
-= 0.4.x (November 2016) =
+= 0.5 (November 2016) =
 
 - Add notice in admin that [Simple History](https://simple-history.com) must be installed and activated to use this plugin.
 - Add some very basic Travis CI tests, so the plugin is less likely to cause any obvious errors.
