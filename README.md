@@ -14,11 +14,11 @@ Download the plugin from https://wordpress.org/plugins/developer-loggers-for-sim
 ## Included plugins and loggers
 
  - Post to Slack
- - WP_Mail-logger  
- - 404 logger  
- - JavaScript error logger  
- - SystemLog logger  
-  - BackUpWordPress
+ - WP_Mail-logger
+ - 404 logger
+ - JavaScript error logger
+ - SystemLog logger
+ - BackUpWordPress
  - ErrorLog logger
  - HTTP API logger
 
