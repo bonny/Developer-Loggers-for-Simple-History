@@ -105,11 +105,40 @@ class SimpleHistory_DeveloperLoggers {
 
     }
 
+    /**
+     * Return array with enabled loggers. Format is like:
+     *  Array
+     *  (
+     *      [FourOhFourLogger] => Array
+     *          (
+     *              [enabled] => 1
+     *          )
+     *
+     *      [AvailableUpdatesLogger] => Array
+     *          (
+     *              [enabled] => 1
+     *          )
+     *
+     *      [Slackit] => Array
+     *          (
+     *              [enabled] => 1
+     *          )
+     *  )
+     */
     function get_enabled_loggers() {
 
         $settings = $this->get_settings();
 
         $enabled_loggers = (array) $settings["enabled_loggers"];
+
+        /**
+         * Filter enabled loggers. Use this filter to automagically enable or disable loggers
+         *
+         * @param array $enabled_loggers
+         * @return array with enabled loggers info
+         */
+        $enabled_loggers = apply_filters( "simple_history/developer_loggers/enabled_loggers", $enabled_loggers );
+
         $enabled_loggers = array_filter( $enabled_loggers, function( $vals ) {
             return $vals["enabled"];
         } );
