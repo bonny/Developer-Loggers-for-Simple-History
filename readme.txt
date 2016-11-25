@@ -66,11 +66,14 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
-= 0.4.x (August 2016) =
+= 0.4.x (November 2016) =
 
 - Add notice in admin that [Simple History](https://simple-history.com) must be installed and activated to use this plugin.
 - Add some very basic Travis CI tests, so the plugin is less likely to cause any obvious errors.
-- The Available Updates Logger has not moved to the Simple History plugin, because it's useful for most users and not only admins.
+- The Available Updates Logger has now moved to the main Simple History plugin, because it's useful for most users and not only admins.
+- Added filter `simple_history/developer_loggers/enabled_loggers` to modify what plugins are enabled.
+- Added filter `simple_history/developer_loggers/slackit/settings` to modify the settings of the Slackit logger.
+- Added `examples.php` with some examples of filter usage.
 
 = 0.4.1 (August 2016) =
 
