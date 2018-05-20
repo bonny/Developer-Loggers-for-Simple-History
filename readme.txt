@@ -66,6 +66,11 @@ The time for the request to complete is also logged. Great for debugging!
 
 ## Changelog
 
+= 0.n (2018) =
+
+- Add logger for the WordPress REST API. When this logger is enabled you can see what routes are being called and what class and method that route calls. Also parameters are included. And the response! Super nice for debugging and testing REST API related stuff.
+- Use alternative way to check if Simple History is installed. So now you can use this plugin even if Simple History for some reason is not installed using the folder name "plugins/simple-history".
+
 = 0.5 (November 2016) =
 
 - Add notice in admin that [Simple History](https://simple-history.com) must be installed and activated to use this plugin.
