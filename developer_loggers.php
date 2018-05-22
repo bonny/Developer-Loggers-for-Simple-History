@@ -24,7 +24,7 @@ if ( version_compare( phpversion(), '5.4', '>=' ) ) {
 
 	}
 
-	add_action( "simple_history/add_custom_logger", "SimpleHistory_DeveloperLoggers_addCustomLogger" );
+	add_action( 'simple_history/add_custom_logger', 'SimpleHistory_DeveloperLoggers_addCustomLogger' );
 
 	/**
 	 * Fallback if Simple History is not installed
@@ -37,7 +37,7 @@ if ( version_compare( phpversion(), '5.4', '>=' ) ) {
 			add_action( 'admin_notices', function() {
 				?>
 				<div class="updated error">
-					<p><?php _e( '"Developer Loggers for Simple History" requires that the plugin "Simple History" is installed and activated.', 'simple-history' ); ?></p>
+					<p><?php esc_html_e( '"Developer Loggers for Simple History" requires that the plugin "Simple History" is installed and activated.', 'simple-history' ); ?></p>
 				</div>
 				<?php
 			} );
