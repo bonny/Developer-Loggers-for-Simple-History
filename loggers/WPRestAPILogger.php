@@ -22,7 +22,7 @@ class WPRestAPILogger extends SimpleLogger {
 			'name' => 'WordPress REST API',
 			'description' => 'Logs calls that WP and plugins make to the WP REST API',
 			'messages' => array(
-				'wp_rest_api_called' => __( 'WP REST API called for route "{request_route}", handled by class "{handler_callback_class}" and method "{handler_callback_method}"', 'simple-history' ),
+				'wp_rest_api_called' => __( 'WP REST API called for route "{request_route}", handled by "{handler_callback_string}"', 'simple-history' ),
 			),
 		);
 
@@ -57,15 +57,39 @@ class WPRestAPILogger extends SimpleLogger {
 	 * @return WP_HTTP_Response $response
 	 */
 	public function on_rest_request_after_callbacks( $response, $handler, $request ) {
-		$handler_callback = $handler['callback'];
-		$handler_callback_object = get_class( $handler_callback[0] );
-		$handler_callback_method = $handler_callback[1];
+		// Callback can be string or array.
+		// For example "wpcf7_rest_create_feedback"
+		// or [0] Redirection_Api_Redirect Object, [1] route_list.
+		$handler_callback = isset( $handler['callback'] ) ? $handler['callback'] : null;
+
+		if ( empty( $handler_callback ) ) {
+			return $response;
+		}
+
+		// Check if callback is function or method in class.
+		$handler_callback_string = '';
+		if ( is_string( $handler_callback ) ) {
+			// Is function name.
+			$handler_callback_string = "{$handler_callback}()";
+		} else if ( is_array( $handler_callback ) && 2 === count( $handler_callback ) ) {
+			// Maybe is class and method.
+			if ( 'object' === gettype( $handler_callback[0] ) && is_string( $handler_callback[1] ) ) {
+				$handler_callback_string = sprintf(
+					'%1$s->%2$s()',
+					get_class( $handler_callback[0] ),
+					$handler_callback[1]
+				);
+			}
+		}
+
+		if ( ! $handler_callback_string ) {
+			return $response;
+		}
 
 		$context = array(
 			'request_route' => $request->get_route(),
 			'request_params' => $request->get_params(),
-			'handler_callback_class' => $handler_callback_object,
-			'handler_callback_method' => $handler_callback_method,
+			'handler_callback_string' => $handler_callback_string,
 			'response' => $response,
 			'handler' => $handler,
 			'request' => print_r( $request, true ),
